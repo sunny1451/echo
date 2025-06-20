@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign in to Echo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f6f8fa;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      border: 1px solid #d8dee4;
+      border-radius: 6px;
+      padding: 40px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      font-size: 22px;
+      color: #24292f;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 14px;
+      display: block;
+      margin-bottom: 6px;
+      color: #24292f;
+    }
+
+    .password-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .password-header span {
+      font-size: 14px;
+      font-weight: 600;
+      color: #24292f;
+    }
+
+    .forgot {
+      font-size: 13px;
+      color: #6e7781;
+      text-decoration: none;
+    }
+
+    .forgot:hover {
+      color: #0969da;
+      text-decoration: underline;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #2da44e;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #218739;
+    }
+
+    .signup-link {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .signup-link a {
+      color: #6f42c1;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+
+    .info {
+      text-align: center;
+      color: red;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Sign in to Echo</h2>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email" required />
+    </div>
+    <div class="form-group">
+      <div class="password-header">
+        <span>Password</span>
+        <a href="./forgot-password.html" class="forgot">Forgot password?</a>
+      </div>
+      <input type="password" id="password" placeholder="Enter your password" required />
+    </div>
+    <button id="loginBtn">Sign in</button>
+    <p class="info" id="message"></p>
+    <div class="signup-link">
+      New to Echo? <a href="./create/create.html">Create an account</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFoIoUsTJ_4NzkV-sdNffAOjbHRxSRIp8",
+      authDomain: "echo-625fa.firebaseapp.com",
+      projectId: "echo-625fa",
+      storageBucket: "echo-625fa.appspot.com",
+      messagingSenderId: "890702112097",
+      appId: "1:890702112097:web:e81927ba359a8c426c1120",
+      measurementId: "G-DMBW4N7J2T"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Handle login button click
+    document.getElementById("loginBtn").addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const messageEl = document.getElementById("message");
+
+      // Validate input
+      if (!email || !password) {
+        messageEl.style.color = "red";
+        messageEl.innerText = "Please enter both email and password.";
+        return;
+      }
+
+      try {
+        // Sign in with Firebase Authentication
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Verify user data in Firestore
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (!userDoc.exists()) {
+          throw new Error("User data not found in database. Please sign up again.");
+        }
+
+        messageEl.style.color = "green";
+        messageEl.innerText = "Login successful! Redirecting...";
+
+        // Redirect directly to profile page
+        setTimeout(() => {
+          window.location.href = "file:///C:/Users/sunny/OneDrive/Desktop/echo/login/role/profile/codersprofile.html";
+        }, 2000);
+      } catch (error) {
+        // Handle specific Firebase errors
+        let errorMessage;
+        switch (error.code) {
+          case "auth/invalid-credential":
+          case "auth/user-not-found":
+          case "auth/wrong-password":
+            errorMessage = "Incorrect email or password. Please try again or reset your password.";
+            break;
+          case "auth/invalid-email":
+            errorMessage = "Invalid email format.";
+            break;
+          case "auth/too-many-requests":
+            errorMessage = "Too many login attempts. Please try again later.";
+            break;
+          case "auth/network-request-failed":
+            errorMessage = "Network error. Ensure you're connected to the internet and serving via HTTP/HTTPS.";
+            break;
+          default:
+            errorMessage = `Login failed: ${error.message}`;
+        }
+        messageEl.style.color = "red";
+        messageEl.innerText = errorMessage;
+        console.error("Login error:", error);
+      }
+    });
+  </script>
+</body>
+</html>
