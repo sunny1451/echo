@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search - Echo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background: #f5f5f5;
+      color: #1f2a44;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: #ffffff;
+      padding: 12px 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      color: #2da44e;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #1f2a44;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      background-color: #f0f2f5;
+      color: #2da44e;
+    }
+
+    .nav-links a.active {
+      background-color: #2da44e;
+      color: #ffffff;
+    }
+
+    .nav-links img {
+      width: 18px;
+      height: 18px;
+      opacity: 0.7;
+    }
+
+    .nav-links a.active img {
+      opacity: 1;
+      filter: brightness(0) invert(1);
+    }
+
+    .search-container {
+      max-width: 1200px;
+      margin: 80px auto 20px;
+      padding: 0 20px;
+      display: flex;
+      justify-content: flex-end;
+      position: relative;
+    }
+
+    .search-bar {
+      width: 300px;
+      padding: 10px 16px;
+      border: 1px solid #d0d7de;
+      border-radius: 20px;
+      font-size: 14px;
+      background-color: #ffffff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-bar:focus {
+      border-color: #2da44e;
+      box-shadow: 0 0 0 3px rgba(45, 164, 78, 0.1);
+    }
+
+    .suggestions {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      width: 300px;
+      max-height: 360px;
+      overflow-y: auto;
+      background-color: #ffffff;
+      border: 1px solid #d0d7de;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      display: none;
+      margin-top: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: #2da44e #f0f2f5;
+    }
+
+    .suggestions::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .suggestions::-webkit-scrollbar-track {
+      background: #f0f2f5;
+    }
+
+    .suggestions::-webkit-scrollbar-thumb {
+      background-color: #2da44e;
+      border-radius: 10px;
+    }
+
+    .suggestion-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .suggestion-item:hover {
+      background-color: #f0f2f5;
+    }
+
+    .suggestion-item img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 12px;
+      object-fit: cover;
+      border: 1px solid #e1e4e8;
+    }
+
+    .suggestion-item div {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .suggestion-item div span {
+      display: block;
+      color: #586069;
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .no-results {
+      text-align: center;
+      color: #586069;
+      padding: 16px;
+      font-size: 14px;
+    }
+
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      flex-grow: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">Echo</a>
+      <div class="nav-links">
+        <a href="posts.html">
+          <img src="https://cdn-icons-png.flaticon.com/512/9350/9350064.png" alt="Posts Icon" />
+          Posts
+        </a>
+        <a href="profile.html">
+          <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Profile Icon" />
+          Profile
+        </a>
+        <a href="settings.html">
+          <img src="https://cdn-icons-png.flaticon.com/512/4508/4508440.png" alt="Settings Icon" />
+          Settings
+        </a>
+        <a href="file:///C:/Users/sunny/OneDrive/Desktop/echo/login/role/profile/codersprofile.html" class="active">
+          <img src="https://cdn-icons-png.flaticon.com/512/3917/3917132.png" alt="Search Icon" />
+          Search
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="search-container">
+    <input type="text" class="search-bar" id="searchInput" placeholder="Search by name or username..." aria-label="Search accounts" />
+    <div class="suggestions" id="suggestions"></div>
+  </div>
+
+  <div class="main-content">
+    <!-- Placeholder for future content -->
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFoIoUsTJ_4NzkV-sdNffAOjbHRxSRIp8",
+      authDomain: "echo-625fa.firebaseapp.com",
+      projectId: "echo-625fa",
+      storageBucket: "echo-625fa.appspot.com",
+      messagingSenderId: "890702112097",
+      appId: "1:890702112097:web:e81927ba359a8c426c1120",
+      measurementId: "G-DMBW4N7J2T"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const searchInput = document.getElementById('searchInput');
+    const suggestions = document.getElementById('suggestions');
+    let loggedInUserUid = null;
+    let userCache = null; // Cache for user data
+
+    // Debounce function to limit search calls
+    function debounce(func, delay) {
+      let timeoutId;
+      return function (...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func.apply(this, args), delay);
+      };
+    }
+
+    // Sanitize HTML to prevent XSS
+    function sanitizeHTML(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    async function fetchUsers() {
+      if (userCache) {
+        console.log('Using cached user data');
+        return userCache;
+      }
+
+      try {
+        const usersRef = collection(db, 'users');
+        const allUsersSnapshot = await getDocs(usersRef);
+        console.log('All users count:', allUsersSnapshot.size);
+
+        const users = new Map();
+        allUsersSnapshot.forEach(doc => {
+          users.set(doc.id, doc.data());
+        });
+
+        userCache = users;
+        return users;
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        return new Map();
+      }
+    }
+
+    async function searchAccounts() {
+      const searchQuery = searchInput.value.trim().toLowerCase();
+      suggestions.innerHTML = '';
+      suggestions.style.display = searchQuery ? 'block' : 'none';
+
+      console.log('Search query:', searchQuery);
+
+      if (!searchQuery) {
+        console.log('Empty query, hiding suggestions');
+        return;
+      }
+
+      try {
+        const users = await fetchUsers();
+        console.log(`Total users in cache: ${users.size}`);
+
+        const filteredUsers = new Map();
+        users.forEach((data, docId) => {
+          const fullName = (data.fullName || '').toLowerCase();
+          const username = (data.username || docId).toLowerCase();
+          if (fullName.includes(searchQuery) || username.includes(searchQuery)) {
+            filteredUsers.set(docId, data);
+          }
+        });
+
+        console.log(`Found ${filteredUsers.size} users:`, Array.from(filteredUsers.entries()));
+
+        if (filteredUsers.size === 0) {
+          suggestions.innerHTML = '<div class="no-results">No accounts found.</div>';
+          console.log('No users found for query');
+          return;
+        }
+
+        // Sort users by fullName
+        const sortedUsers = Array.from(filteredUsers.entries()).sort(([, a], [, b]) => 
+          (a.fullName || '').localeCompare(b.fullName || '')
+        );
+
+        for (const [docId, userData] of sortedUsers) {
+          const fullName = userData.fullName || 'Unnamed User';
+          const username = userData.username || docId;
+          const profilePic = userData.profile?.profilePicture || 'https://via.placeholder.com/40';
+          console.log(`Rendering: ${fullName}, @${username}, Image: ${profilePic}`);
+
+          const suggestionItem = document.createElement('div');
+          suggestionItem.className = 'suggestion-item';
+          suggestionItem.innerHTML = `
+            <img src="${sanitizeHTML(profilePic)}" alt="${sanitizeHTML(fullName)}'s profile picture" onerror="this.src='https://via.placeholder.com/40';" />
+            <div>
+              ${sanitizeHTML(fullName)}
+              <span>@${sanitizeHTML(username)}</span>
+            </div>
+          `;
+          suggestionItem.onclick = () => {
+            console.log(`Navigating to profile: @${username}`);
+            window.location.href = `file:///C:/Users/sunny/OneDrive/Desktop/echo/login/role/profile/codersprofile.html?username=${encodeURIComponent(username)}`;
+            suggestions.style.display = 'none';
+            searchInput.value = '';
+          };
+          suggestions.appendChild(suggestionItem);
+        }
+      } catch (error) {
+        console.error('Error searching accounts:', error);
+        suggestions.innerHTML = '<div class="no-results">Error loading results. Please try again.</div>';
+      }
+    }
+
+    // Debounced search function
+    const debouncedSearchAccounts = debounce(searchAccounts, 50); // Reduced for speed
+
+    // Attach event listener
+    searchInput.addEventListener('input', () => {
+      console.log('Input event triggered:', searchInput.value);
+      debouncedSearchAccounts();
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        console.log('No user logged in, redirecting to login');
+        window.location.href = 'file:///C:/Users/sunny/OneDrive/Desktop/echo/login/login.html';
+        return;
+      }
+      loggedInUserUid = user.uid;
+      console.log('Logged in user UID:', loggedInUserUid);
+      // Pre-fetch users on login
+      fetchUsers();
+    });
+
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', (event) => {
+      if (!searchInput.contains(event.target) && !suggestions.contains(event.target)) {
+        console.log('Click outside, hiding suggestions');
+        suggestions.style.display = 'none';
+      }
+    });
+
+    // Focus search bar on page load
+    searchInput.focus();
+  </script>
+</body>
+</html>

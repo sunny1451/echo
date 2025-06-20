@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolios - Echo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* General Reset and Body Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif; /* Using Inter as per instructions */
+            background: #ffeb3b;
+            background: linear-gradient(135deg, #ffeb3b, #ffe082); /* Yellow-orange gradient */
+            color: #262626;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: #262626;
+            padding: 15px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: #fff;
+            font-size: 28px;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 1.5px;
+            padding: 5px 10px;
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Main Portfolio Browsing Container */
+        .portfolio-browsing-section {
+            flex-grow: 1; /* Allows it to take available space */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative; /* For absolute positioning of arrows */
+        }
+
+        /* Portfolio Card Styling */
+        .portfolio-card {
+            background: rgba(255, 255, 255, 0.9); /* Glassmorphism effect */
+            border: 1px solid rgba(221, 221, 221, 0.5);
+            border-radius: 20px;
+            padding: 45px;
+            text-align: center;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            transition: transform 0.5s ease, box-shadow 0.5s ease, opacity 0.5s ease;
+            position: absolute; /* Stack cards on top of each other */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            width: 85%;
+            max-width: 700px;
+            opacity: 0;
+            display: none; /* Hidden by default, shown by JS */
+            animation: fadeIn 0.5s ease forwards;
+            min-height: 600px; /* Increased min-height for better visual consistency */
+            display: flex; /* Flexbox for internal content alignment */
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .portfolio-card.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            display: flex; /* Make active card visible */
+        }
+
+        .portfolio-card:not(.active) {
+            pointer-events: none; /* Disable interaction for non-active cards */
+        }
+
+        /* Profile image specific for these cards */
+        .portfolio-card img.user-profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 25px; /* Centered and spaced */
+            border: 4px solid #fff;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+            transition: transform 0.4s ease;
+        }
+
+        .portfolio-card img.user-profile-img:hover {
+            transform: scale(1.08);
+        }
+
+        .portfolio-card h2 {
+            font-size: 2.5em; /* Larger title for emphasis */
+            margin-bottom: 20px;
+            color: #262626;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .portfolio-card .user-details {
+            color: #555;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+
+        .portfolio-card .user-details strong {
+            color: #007bff;
+        }
+
+        .portfolio-card .public-description {
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 1.15em; /* Slightly larger text */
+            line-height: 1.8;
+            flex-grow: 1; /* Allows description to take available space */
+        }
+
+        .portfolio-card .project-list {
+            margin-top: 30px;
+            text-align: left;
+            max-height: 180px; /* Fixed height for scrollable projects */
+            overflow-y: auto; /* Scroll for projects */
+            padding-right: 15px; /* Space for scrollbar */
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: #007bff rgba(0, 149, 246, 0.2); /* Firefox */
+            border-top: 1px solid #eee; /* Separator for project list */
+            padding-top: 20px;
+        }
+
+        .portfolio-card .project-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .portfolio-card .project-list::-webkit-scrollbar-track {
+            background: rgba(0, 149, 246, 0.1);
+            border-radius: 10px;
+        }
+
+        .portfolio-card .project-list::-webkit-scrollbar-thumb {
+            background-color: #007bff;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .project-item {
+            background: #fcfcfc;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .project-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .project-item h3 {
+            font-size: 1.3em;
+            color: #444;
+            margin-bottom: 8px;
+            text-align: center; /* Center project titles within item */
+        }
+
+        .project-item p {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 10px;
+            text-align: center; /* Center project descriptions */
+        }
+
+        .project-links {
+            text-align: center; /* Center project buttons */
+        }
+
+        .project-links a {
+            display: inline-block;
+            background: #007bff;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9em;
+            margin: 5px; /* Adjusted margin */
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .project-links a:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 149, 246, 0.8); /* Transparent blue */
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 70px; /* Larger arrows */
+            height: 70px;
+            font-size: 35px; /* Larger icon */
+            cursor: pointer;
+            transition: background 0.4s ease, transform 0.4s ease, box-shadow 0.3s ease;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .nav-arrow:hover {
+            background: rgba(0, 123, 181, 0.95); /* Darker hover */
+            transform: translateY(-50%) scale(1.15); /* More prominent scale */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .left-arrow {
+            left: 20px; /* Near left corner */
+        }
+
+        .right-arrow {
+            right: 20px; /* Near right corner */
+        }
+
+        .no-portfolios {
+            text-align: center;
+            color: #262626;
+            padding: 50px; /* More padding */
+            font-size: 24px; /* Larger font */
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px; /* More rounded */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            max-width: 700px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            line-height: 1.5; /* Added for readability */
+        }
+        .no-portfolios a {
+            color: #007bff; /* Link color for "Edit Portfolio" */
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        .no-portfolios a:hover {
+            color: #0056b3;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #007bff;
+            border-radius: 50%;
+            width: 70px; /* Larger spinner */
+            height: 70px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* Hidden by default */
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9); /* Slightly more subtle initial scale */
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px 15px;
+            }
+            .nav-logo {
+                font-size: 24px;
+            }
+            .portfolio-card {
+                padding: 30px;
+                width: 95%;
+                min-height: 550px;
+            }
+            .portfolio-card img.user-profile-img {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 20px;
+            }
+            .portfolio-card h2 {
+                font-size: 2em;
+                margin-bottom: 15px;
+            }
+            .portfolio-card .user-details {
+                font-size: 1em;
+                margin-bottom: 20px;
+            }
+            .portfolio-card .public-description {
+                font-size: 1.05em;
+                margin-bottom: 25px;
+            }
+            .portfolio-card .project-list {
+                max-height: 150px;
+            }
+            .project-item {
+                padding: 12px;
+                margin-bottom: 10px;
+            }
+            .project-item h3 {
+                font-size: 1.2em;
+            }
+            .project-item p {
+                font-size: 0.9em;
+            }
+            .project-links a {
+                padding: 7px 14px;
+                font-size: 0.85em;
+                margin: 3px;
+            }
+            .nav-arrow {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-arrow {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+                left: 10px;
+                right: 10px;
+            }
+            .portfolio-card {
+                padding: 20px;
+                min-height: 500px;
+            }
+            .portfolio-card img.user-profile-img {
+                width: 80px;
+                height: 80px;
+            }
+            .portfolio-card h2 {
+                font-size: 1.8em;
+            }
+            .portfolio-card .public-description {
+                font-size: 1em;
+            }
+            .portfolio-card .project-list {
+                max-height: 120px;
+            }
+            .no-portfolios {
+                padding: 30px;
+                font-size: 20px;
+            }
+            .loading-spinner {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Echo</a>
+            <!-- Removed 'Edit Portfolio' and 'Browse Others' links -->
+        </div>
+    </nav>
+
+    <div class="portfolio-browsing-section">
+        <div id="loadingSpinner" class="loading-spinner active"></div>
+        <button class="nav-arrow left-arrow" onclick="changePortfolio(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div id="portfolioCardsContainer">
+            <!-- Portfolio cards will be dynamically loaded here -->
+        </div>
+        <button class="nav-arrow right-arrow" onclick="changePortfolio(1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <div id="noPortfoliosMessage" class="no-portfolios" style="display:none;">
+            <!-- Content will be updated by JavaScript -->
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+        import { getFirestore, collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+        // Firebase Configuration (reusing the one from your previous snippets)
+        // Global variables provided by the Canvas environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyBFoIoUsTJ_4NzkV-sdNffAOjbHRxSRIp8", // Replace with your actual API Key or use __firebase_config
+            authDomain: "echo-625fa.firebaseapp.com",
+            projectId: "echo-625fa",
+            storageBucket: "echo-625fa.appspot.com",
+            messagingSenderId: "890702112097",
+            appId: "1:890702112097:web:e81927ba359a8c426c1120",
+            measurementId: "G-DMBW4N7J2T"
+        };
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const portfolioCardsContainer = document.getElementById('portfolioCardsContainer');
+        const noPortfoliosMessage = document.getElementById('noPortfoliosMessage');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        let allPortfolios = []; // Stores all fetched portfolio (post) data
+        let currentIndex = 0; // Current index for the carousel
+
+        // Authenticate and load portfolios
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                console.log("No user authenticated. Attempting anonymous sign-in or custom token.");
+                try {
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        console.log("Signed in with custom token successfully.");
+                    } else {
+                        await signInAnonymously(auth);
+                        console.log("Signed in anonymously successfully.");
+                    }
+                    // User is now signed in, proceed to load data
+                    loadAllPortfolios();
+                } catch (error) {
+                    console.error("Authentication failed or encountered an error. Redirecting to login:", error);
+                    // Fallback: If auth fails, ensure the user logs in
+                    window.location.href = "login.html";
+                }
+            } else {
+                console.log("User already authenticated:", user.uid);
+                loadAllPortfolios();
+            }
+        });
+
+        /**
+         * Fetches all portfolio posts and associated user data from Firestore.
+         */
+        async function loadAllPortfolios() {
+            console.log("Attempting to load all portfolios...");
+            loadingSpinner.classList.add('active'); // Show spinner
+            try {
+                // Ensure appId is correctly used in the Firestore path
+                const currentAppId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+                const postsCollectionRef = collection(db, `artifacts/${currentAppId}/public/data/posts`);
+                const querySnapshot = await getDocs(postsCollectionRef);
+
+                console.log(`Found ${querySnapshot.docs.length} public posts.`);
+
+                if (querySnapshot.empty) {
+                    noPortfoliosMessage.innerHTML = `No public portfolios available to browse.<br>
+                        If you'd like to publish yours, please go to your <a href="index.html" target="_blank">personal portfolio page</a>
+                        and then use the 'Edit Portfolio' link to create and publish your public post.`;
+                    noPortfoliosMessage.style.display = 'block';
+                    loadingSpinner.classList.remove('active');
+                    console.log("No public posts found in Firestore.");
+                    return;
+                }
+
+                const fetchedPortfolios = [];
+                // Use Promise.all to fetch user data concurrently for each post
+                const portfolioPromises = querySnapshot.docs.map(async (postDoc) => {
+                    const postData = { id: postDoc.id, ...postDoc.data() };
+                    console.log("Processing post:", postData.id, postData.ideaTitle);
+
+                    // Ensure userId exists before attempting to fetch user data
+                    if (postData.userId) {
+                        // Fetch user profile from the 'profile/data' subcollection
+                        const userProfileDocRef = doc(db, `artifacts/${currentAppId}/users/${postData.userId}/profile`, 'data');
+                        const userProfileDoc = await getDoc(userProfileDocRef);
+                        const userData = userProfileDoc.exists() ? userProfileDoc.data() : {};
+                        console.log("User profile data fetched for", postData.userId, ":", userProfileDoc.exists() ? "Exists" : "Does Not Exist");
+
+                        // Fetch user projects from the 'projects/data' subcollection
+                        const userProjectsDocRef = doc(db, `artifacts/${currentAppId}/users/${postData.userId}/projects`, 'data');
+                        const userProjectsDoc = await getDoc(userProjectsDocRef);
+                        const userProjects = userProjectsDoc.exists() ? (userProjectsDoc.data().projects || []) : [];
+                        console.log("User projects data fetched for", postData.userId, ":", userProjectsDoc.exists() ? "Exists" : "Does Not Exist", "Projects count:", userProjects.length);
+
+                        fetchedPortfolios.push({
+                            ...postData,
+                            userName: userData.fullName || userData.username || 'Unnamed User',
+                            userProfilePicture: userData.profilePicture || 'https://placehold.co/120x120/cccccc/333333?text=User',
+                            userSkills: userData.skills?.join(', ') || 'Not specified',
+                            userLocation: [userData.location?.district, userData.location?.state, userData.country].filter(Boolean).join(', ') || 'Not specified',
+                            projects: userProjects
+                        });
+                    } else {
+                        console.warn(`Post ${postData.id} is missing a userId. It will be displayed with default user info.`);
+                        // Add post even if user data cannot be fetched completely
+                        fetchedPortfolios.push({
+                            ...postData,
+                            userName: 'Unknown User',
+                            userProfilePicture: 'https://placehold.co/120x120/cccccc/333333?text=User',
+                            userSkills: 'Not specified',
+                            userLocation: 'Not specified',
+                            projects: []
+                        });
+                    }
+                });
+
+                await Promise.all(portfolioPromises); // Wait for all user data fetches to complete
+                allPortfolios = fetchedPortfolios;
+
+                console.log(`Finished processing all posts. Total portfolios to display: ${allPortfolios.length}`);
+
+                if (allPortfolios.length > 0) {
+                    renderPortfolio(); // Render the first portfolio
+                } else {
+                    // This case should ideally not be reached if querySnapshot.empty was false
+                    noPortfoliosMessage.innerHTML = `No portfolios could be displayed after processing available data.`;
+                    noPortfoliosMessage.style.display = 'block';
+                    console.log("No portfolios available to display after filtering/processing.");
+                }
+            } catch (error) {
+                console.error("Error loading portfolios:", error);
+                noPortfoliosMessage.innerHTML = `Failed to load portfolios. Please try again later.
+                                                  <br>Error details: ${error.message}`;
+                noPortfoliosMessage.style.display = 'block';
+            } finally {
+                loadingSpinner.classList.remove('active'); // Hide spinner
+                console.log("Loading process completed.");
+            }
+        }
+
+        /**
+         * Renders the current portfolio card.
+         */
+        function renderPortfolio() {
+            console.log(`Rendering portfolio at index: ${currentIndex}`);
+            portfolioCardsContainer.innerHTML = ''; // Clear previous card
+            if (allPortfolios.length === 0) {
+                noPortfoliosMessage.style.display = 'block';
+                console.log("No portfolios to render. Showing 'no portfolios' message.");
+                return;
+            }
+            noPortfoliosMessage.style.display = 'none';
+
+            const portfolio = allPortfolios[currentIndex];
+            console.log("Current portfolio data for rendering:", portfolio);
+
+            const card = document.createElement('div');
+            card.className = 'portfolio-card active'; // Add active class to show it
+            card.innerHTML = `
+                <img src="${portfolio.userProfilePicture}" alt="${portfolio.userName}'s Profile" class="user-profile-img" onerror="this.onerror=null; this.src='https://placehold.co/120x120/cccccc/333333?text=User';">
+                <h2>${portfolio.ideaTitle || 'Untitled Portfolio'}</h2>
+                <div class="user-details">
+                    By: <strong>${portfolio.userName}</strong> | Skills: ${portfolio.userSkills} | Location: ${portfolio.userLocation}
+                </div>
+                <p class="public-description">${portfolio.description || 'No description available for this public post.'}</p>
+                <div class="project-list">
+                    <h3>User Projects:</h3>
+                    ${portfolio.projects && portfolio.projects.length > 0 ?
+                        portfolio.projects.map(project => `
+                            <div class="project-item">
+                                <h3>${project.name || 'Unnamed Project'}</h3>
+                                <p>${project.description || 'No description available.'}</p>
+                                <div class="project-links">
+                                    ${project.codeLink ? `<a href="${project.codeLink}" target="_blank">Source Code</a>` : ''}
+                                    ${project.liveLink || project.projectLink ? `<a href="${project.liveLink || project.projectLink}" target="_blank">Live Project</a>` : ''}
+                                </div>
+                            </div>
+                        `).join('')
+                        : '<p>No projects listed by this user.</p>'
+                    }
+                </div>
+            `;
+            portfolioCardsContainer.appendChild(card);
+            console.log("Portfolio card appended to container.");
+        }
+
+        /**
+         * Changes the displayed portfolio based on direction.
+         * @param {number} direction - -1 for previous, 1 for next.
+         */
+        window.changePortfolio = function(direction) {
+            if (allPortfolios.length === 0) {
+                console.log("Cannot change portfolio, no portfolios loaded.");
+                return;
+            }
+
+            // Remove 'active' class from current card for transition
+            const currentCard = portfolioCardsContainer.querySelector('.portfolio-card.active');
+            if (currentCard) {
+                currentCard.classList.remove('active');
+                console.log("Removed active class from current card.");
+            }
+
+            currentIndex += direction;
+            if (currentIndex < 0) {
+                currentIndex = allPortfolios.length - 1;
+            } else if (currentIndex >= allPortfolios.length) {
+                currentIndex = 0;
+            }
+            console.log(`Navigating to new index: ${currentIndex}`);
+
+            // A small delay to allow the removal of 'active' to take effect before re-rendering
+            setTimeout(renderPortfolio, 300); // Increased delay slightly for better visual
+        };
+    </script>
+</body>
+</html>

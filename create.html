@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account - Echo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f6f8fa;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      border: 1px solid #d8dee4;
+      border-radius: 6px;
+      padding: 40px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      font-size: 22px;
+      color: #24292f;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 14px;
+      display: block;
+      margin-bottom: 6px;
+      color: #24292f;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #0969da;
+      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #2da44e;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #218739;
+    }
+
+    button:disabled {
+      background-color: #94d3a2;
+      cursor: not-allowed;
+    }
+
+    .info {
+      text-align: center;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .back-link {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .back-link a {
+      color: #6f42c1;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+      color: #0969da;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 12px;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+      animation: shake 0.3s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      filter: invert(0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Create an Account</h2>
+
+    <div class="form-group">
+      <label for="fullName">Full Name</label>
+      <input type="text" id="fullName" placeholder="Enter your full name" required />
+      <p id="fullNameError" class="error-message"></p>
+    </div>
+
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter your username" required />
+      <p id="usernameError" class="error-message"></p>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email" required />
+      <p id="emailError" class="error-message"></p>
+    </div>
+
+    <div class="form-group">
+      <label for="dob">Date of Birth</label>
+      <input type="date" id="dob" required />
+      <p id="dobError" class="error-message"></p>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password" required />
+      <p id="passwordError" class="error-message"></p>
+    </div>
+
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" placeholder="Confirm your password" required />
+      <p id="confirmPasswordError" class="error-message"></p>
+    </div>
+
+    <button id="signupBtn">Create Account</button>
+    <p id="message" class="info"></p>
+
+    <div class="back-link">
+      Already have an account? <a href="file:///C:/Users/sunny/OneDrive/Desktop/echo/login/login.html">Sign in</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, query, where, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFoIoUsTJ_4NzkV-sdNffAOjbHRxSRIp8",
+      authDomain: "echo-625fa.firebaseapp.com",
+      projectId: "echo-625fa",
+      storageBucket: "echo-625fa.appspot.com",
+      messagingSenderId: "890702112097",
+      appId: "1:890702112097:web:e81927ba359a8c426c1120",
+      measurementId: "G-DMBW4N7J2T"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // DOM elements
+    const signupBtn = document.getElementById("signupBtn");
+    const message = document.getElementById("message");
+    const inputs = {
+      fullName: document.getElementById("fullName"),
+      username: document.getElementById("username"),
+      email: document.getElementById("email"),
+      dob: document.getElementById("dob"),
+      password: document.getElementById("password"),
+      confirmPassword: document.getElementById("confirmPassword")
+    };
+    const errors = {
+      fullName: document.getElementById("fullNameError"),
+      username: document.getElementById("usernameError"),
+      email: document.getElementById("emailError"),
+      dob: document.getElementById("dobError"),
+      password: document.getElementById("passwordError"),
+      confirmPassword: document.getElementById("confirmPasswordError")
+    };
+
+    // Validation functions
+    const validateInputs = () => {
+      let isValid = true;
+      Object.values(errors).forEach(error => error.classList.remove("show"));
+
+      if (!inputs.fullName.value.trim()) {
+        showError("fullName", "Full name is required.");
+        isValid = false;
+      }
+      if (!inputs.username.value.trim()) {
+        showError("username", "Username is required.");
+        isValid = false;
+      } else if (!/^[a-zA-Z0-9_-]+$/.test(inputs.username.value.trim())) {
+        showError("username", "Username can only contain letters, numbers, underscores, and hyphens.");
+        isValid = false;
+      }
+      if (!inputs.email.value.trim()) {
+        showError("email", "Email is required.");
+        isValid = false;
+      } else if (!/\S+@\S+\.\S+/.test(inputs.email.value)) {
+        showError("email", "Invalid email format.");
+        isValid = false;
+      }
+      if (!inputs.dob.value) {
+        showError("dob", "Date of birth is required.");
+        isValid = false;
+      } else {
+        const today = new Date();
+        const dob = new Date(inputs.dob.value);
+        if (dob > today) {
+          showError("dob", "Date of birth cannot be in the future.");
+          isValid = false;
+        }
+      }
+      if (!inputs.password.value) {
+        showError("password", "Password is required.");
+        isValid = false;
+      } else if (inputs.password.value.length < 6) {
+        showError("password", "Password must be at least 6 characters.");
+        isValid = false;
+      }
+      if (inputs.password.value !== inputs.confirmPassword.value) {
+        showError("confirmPassword", "Passwords do not match.");
+        isValid = false;
+      }
+
+      return isValid;
+    };
+
+    const showError = (field, msg) => {
+      errors[field].textContent = msg;
+      errors[field].classList.add("show");
+    };
+
+    // Check username availability
+    const isUsernameAvailable = async (username) => {
+      try {
+        const q = query(collection(db, "users"), where("username", "==", username.toLowerCase()));
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.empty;
+      } catch (error) {
+        console.error("Error checking username availability:", error);
+        throw new Error("Failed to check username availability.");
+      }
+    };
+
+    // Check email availability
+    const isEmailAvailable = async (email) => {
+      try {
+        const signInMethods = await fetchSignInMethodsForEmail(auth, email.toLowerCase());
+        return signInMethods.length === 0;
+      } catch (error) {
+        console.error("Error checking email availability:", error);
+        throw new Error("Failed to check email availability.");
+      }
+    };
+
+    // Signup handler
+    signupBtn.addEventListener("click", async () => {
+      signupBtn.disabled = true;
+      message.textContent = "";
+
+      if (!validateInputs()) {
+        signupBtn.disabled = false;
+        return;
+      }
+
+      const { email, password, fullName, username, dob } = inputs;
+      const usernameValue = username.value.trim().toLowerCase();
+      const emailValue = email.value.trim().toLowerCase();
+
+      try {
+        // Check username and email availability
+        if (!(await isUsernameAvailable(usernameValue))) {
+          showError("username", "Username is already taken.");
+          signupBtn.disabled = false;
+          return;
+        }
+        if (!(await isEmailAvailable(emailValue))) {
+          showError("email", "Email is already registered.");
+          signupBtn.disabled = false;
+          return;
+        }
+
+        // Create user with Firebase Authentication
+        const userCredential = await createUserWithEmailAndPassword(auth, emailValue, password.value);
+        const user = userCredential.user;
+
+        // Save user data to Firestore with UID as document ID
+        await setDoc(doc(db, "users", user.uid), {
+          fullName: fullName.value.trim(),
+          username: usernameValue,
+          email: emailValue,
+          dateOfBirth: dob.value,
+          uid: user.uid,
+          role: "none", // Default role, user selects later
+          createdAt: new Date().toISOString()
+        });
+
+        // Show success message and redirect
+        message.classList.remove("error");
+        message.classList.add("success");
+        message.textContent = "Account created successfully! Redirecting to role selection...";
+        
+        setTimeout(() => {
+          window.location.href = "file:///C:/Users/sunny/OneDrive/Desktop/echo/login/login.html";
+        }, 2000);
+
+      } catch (error) {
+        console.error("Signup error:", error);
+        message.classList.remove("success");
+        message.classList.add("error");
+        let errorMessage;
+        switch (error.code) {
+          case "auth/email-already-in-use":
+            errorMessage = "Email is already registered.";
+            break;
+          case "auth/invalid-email":
+            errorMessage = "Invalid email format.";
+            break;
+          case "auth/weak-password":
+            errorMessage = "Password is too weak.";
+            break;
+          case "permission-denied":
+            errorMessage = "Permission denied. Please check Firestore rules.";
+            break;
+          default:
+            errorMessage = `Signup failed: ${error.message}`;
+        }
+        message.textContent = errorMessage;
+        signupBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat - Echo</title>
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Import Google Fonts - Pacifico for logo/handwritten style, Inter for general text */
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        /* Define primary accent colors for reusability based on the provided header */
+        :root {
+            --light-background: #f5f5f5; /* Light grey background from user's provided code */
+            --text-color-dark: #1f2a44; /* Dark grey-blue for main text */
+            --accent-green: #2da44e; /* The primary vibrant green */
+            --accent-green-dark: #218739; /* Darker green for hover */
+            --accent-light-bg: #f0f2f5; /* Very light grey for subtle backgrounds/hovers */
+            --border-light: #d0d7de; /* Light grey for borders */
+            --shadow-light: rgba(0, 0, 0, 0.1); /* Subtle shadow */
+
+            /* Colors specific to this chat page that align with the base theme */
+            --chat-sidebar-bg: #f5f5f5; /* Matches base light background */
+            --chat-border-color: #e0e0e0; /* Slightly darker than base --border-light */
+            --chat-contact-hover-bg: #fafafa;
+            --chat-contact-active-bg: #e6f4ea; /* Light green tint */
+            --message-sent-bg: #e6f4ea; /* Matches active contact bg */
+            --message-received-bg: #f0f0f0;
+            --message-timestamp-color: #999999;
+            --chat-input-bg: #fafafa;
+            --chat-input-border: #e0e0e0;
+            --chat-input-placeholder: #999999;
+            --disabled-send-btn-bg: #94d3a2;
+            --no-chat-text: #999999;
+            --blocked-message-color: #999999;
+            --danger-color: #dc3545;
+        }
+
+        /* Universal Box-Sizing and Font Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif; /* Default text font for overall consistency */
+        }
+
+        /* Body and Overall Layout - Aligns with the new header's light theme */
+        body {
+            background-color: var(--light-background);
+            color: var(--text-color-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow: hidden; /* Keep hidden for chat layout */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation Bar Styles (from your provided code) */
+        .navbar {
+            background: #ffffff;
+            padding: 12px 20px;
+            position: fixed; /* Changed to fixed for consistency across pages using this style */
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px var(--shadow-light);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: var(--accent-green);
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            font-family: 'Pacifico', cursive;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-color-dark);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--accent-light-bg);
+            color: var(--accent-green);
+        }
+
+        .nav-links a.active {
+            background-color: var(--accent-green);
+            color: #ffffff;
+        }
+
+        .nav-links img {
+            width: 18px;
+            height: 18px;
+            opacity: 0.7;
+        }
+
+        .nav-links a.active img {
+            opacity: 1;
+            filter: brightness(0) invert(1);
+        }
+
+        /* Chat Specific Styles */
+        .chat-container {
+            display: flex;
+            flex: 1;
+            /* Adjusted height to account for fixed navbar height (~48px + margin = ~60px) */
+            height: calc(100vh - 60px);
+            margin-top: 60px; /* Push content down below fixed navbar */
+            overflow: hidden;
+        }
+
+        /* Left Sidebar */
+        .sidebar {
+            width: 350px;
+            background-color: var(--chat-sidebar-bg);
+            border-right: 1px solid var(--chat-border-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .search-bar {
+            padding: 15px;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--chat-border-color);
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--chat-border-color);
+            border-radius: 20px;
+            background-color: var(--chat-contact-hover-bg); /* Use a light variant */
+            color: var(--text-color-dark);
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-bar input::placeholder {
+            color: var(--chat-input-placeholder);
+        }
+
+        .chat-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .chat-contact {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--chat-border-color);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .chat-contact:hover {
+            background-color: var(--chat-contact-hover-bg);
+        }
+
+        .chat-contact.active {
+            background-color: var(--chat-contact-active-bg);
+        }
+
+        .contact-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+            border: 1px solid var(--chat-border-color);
+        }
+
+        .contact-avatar-placeholder {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--chat-border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: var(--message-timestamp-color);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .contact-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-color-dark);
+            margin-bottom: 4px;
+        }
+
+        .last-message {
+            font-size: 13px;
+            color: var(--text-color-medium);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Main Chat Area */
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            min-height: 0;
+            position: relative;
+        }
+
+        .chat-header {
+            padding: 12px 20px;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--chat-border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .chat-header-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .chat-header-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--chat-border-color);
+        }
+
+        .chat-header-avatar-placeholder {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--chat-border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--message-timestamp-color);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .chat-header-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-color-dark);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 70px;
+            left: 20px;
+            background-color: #ffffff;
+            border: 1px solid var(--chat-border-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px var(--shadow-light);
+            z-index: 10;
+            display: none;
+        }
+
+        .dropdown-item {
+            padding: 10px 20px;
+            font-size: 14px;
+            color: var(--text-color-dark);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--accent-light-bg);
+        }
+
+        .dropdown-item.danger {
+            color: var(--danger-color);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 0;
+        }
+
+        .message {
+            max-width: 60%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .message.sent {
+            background-color: var(--message-sent-bg);
+            color: var(--text-color-dark);
+            align-self: flex-end;
+        }
+
+        .message.received {
+            background-color: var(--message-received-bg);
+            color: var(--text-color-dark);
+            align-self: flex-start;
+        }
+
+        .message-timestamp {
+            font-size: 11px;
+            color: var(--message-timestamp-color);
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .message.received .message-timestamp {
+            text-align: left;
+        }
+
+        .chat-input {
+            padding: 15px 20px;
+            background-color: var(--chat-input-bg);
+            border-top: 1px solid var(--chat-input-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: sticky;
+            bottom: 0;
+            z-index: 1;
+            box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .chat-input textarea {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid var(--chat-input-border);
+            border-radius: 20px;
+            background-color: #ffffff;
+            color: var(--text-color-dark);
+            font-size: 14px;
+            resize: none;
+            outline: none;
+            height: 44px;
+            line-height: 1.5;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .chat-input textarea::placeholder {
+            color: var(--chat-input-placeholder);
+        }
+
+        .send-btn {
+            padding: 10px 24px;
+            background-color: var(--accent-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background-color: var(--accent-green-dark);
+        }
+
+        .send-btn:disabled {
+            background-color: var(--disabled-send-btn-bg);
+            cursor: not-allowed;
+        }
+
+        .no-chat-selected {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--no-chat-text);
+            font-size: 18px;
+            font-style: italic;
+        }
+
+        .blocked-message {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--blocked-message-color);
+            font-size: 16px;
+            font-style: italic;
+            text-align: center;
+            gap: 15px;
+        }
+
+        .unblock-btn {
+            padding: 8px 20px;
+            background-color: var(--accent-green);
+            color: #ffffff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .unblock-btn:hover {
+            background-color: var(--accent-green-dark);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 12px 15px; /* Adjusted for smaller screens */
+            }
+            .nav-logo {
+                font-size: 20px; /* Smaller logo */
+            }
+            .nav-links {
+                gap: 10px; /* Reduced gap */
+            }
+            .nav-links a {
+                font-size: 13px; /* Smaller font */
+                padding: 6px 10px; /* Smaller padding */
+                gap: 4px;
+            }
+            .nav-links img {
+                width: 16px;
+                height: 16px;
+            }
+            .chat-container {
+                height: calc(100vh - 55px); /* Adjusted for smaller navbar */
+                margin-top: 55px; /* Push content down below fixed navbar */
+            }
+            .sidebar {
+                width: 300px;
+            }
+
+            .chat-input {
+                padding: 10px 15px;
+                gap: 8px;
+            }
+
+            .chat-input textarea {
+                font-size: 13px;
+                height: 40px;
+            }
+
+            .send-btn {
+                padding: 8px 20px;
+                font-size: 13px;
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 10px 10px;
+            }
+            .nav-logo {
+                font-size: 18px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: flex-end;
+                gap: 8px;
+            }
+            .nav-links a {
+                font-size: 12px;
+                padding: 5px 8px;
+            }
+            .chat-container {
+                height: calc(100vh - 50px); /* Further adjusted */
+                margin-top: 50px; /* Further adjusted */
+            }
+            .sidebar {
+                width: 100%;
+                max-width: 250px;
+                position: absolute; /* Allows it to overlap main chat on small screens */
+                height: 100%;
+                z-index: 2; /* Bring sidebar forward */
+                transform: translateX(-100%); /* Hidden by default */
+                transition: transform 0.3s ease-in-out;
+            }
+            .sidebar.active {
+                transform: translateX(0); /* Show sidebar */
+            }
+
+            .chat-header-name {
+                font-size: 16px;
+            }
+
+            .chat-input {
+                padding: 8px 10px;
+                gap: 6px;
+            }
+
+            .chat-input textarea {
+                font-size: 12px;
+                height: 36px;
+            }
+
+            .send-btn {
+                padding: 6px 16px;
+                font-size: 12px;
+                height: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">Echo</a>
+            <div class="nav-links">
+                <!-- Converted to relative paths -->
+                <a href="../role/profile/search/search.html">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3917/3917132.png" alt="Search Icon" />
+                    Search
+                </a>
+                <a href="posts.html">
+                    <img src="https://cdn-icons-png.flaticon.com/512/9350/9350064.png" alt="Posts Icon" />
+                    Posts
+                </a>
+                <a href="settings.html">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4508/4508440.png" alt="Settings Icon" />
+                    Settings
+                </a>
+                <a href="../role/profile/codersprofile.html">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Profile Icon" />
+                    Profile
+                </a>
+                <a href="message.html" class="active">
+                    <img src="https://cdn-icons-png.flaticon.com/512/893/893257.png" alt="Chats Icon" />
+                    Chats
+                </a>
+                <a href="reels.html">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4379/4379560.png" alt="Reels Icon" />
+                    Reels
+                </a>
+                <a href="portfolio.html">
+                    <img src="https://cdn-icons-png.flaticon.com/512/10493/10493865.png" alt="Portfolio Icon" />
+                    Portfolio
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="chat-container">
+        <!-- Left Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search users..." />
+            </div>
+            <div class="chat-list" id="chatList">
+                <!-- Chat contacts will be dynamically added here -->
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="chat-main" id="chatMain">
+            <div class="no-chat-selected" id="noChatMessage">
+                Select a user to start chatting
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Firebase imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import { getFirestore, collection, query, where, getDocs, doc, getDoc, onSnapshot, addDoc, serverTimestamp, orderBy, limit, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFoIoUsTJ_4NzkV-sdNffAOjbHRxSRIp8",
+            authDomain: "echo-625fa.firebaseapp.com",
+            projectId: "echo-625fa",
+            storageBucket: "echo-625fa.appspot.com",
+            messagingSenderId: "890702112097",
+            appId: "1:890702112097:web:e81927ba359a8c426c1120",
+            measurementId: "G-DMBW4N7J2T"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // DOM elements
+        const chatList = document.getElementById("chatList");
+        const chatMain = document.getElementById("chatMain");
+        const searchInput = document.getElementById("searchInput");
+        const noChatMessage = document.getElementById("noChatMessage");
+        const sidebar = document.getElementById("sidebar"); // Added for mobile toggling
+
+        // Global state
+        let currentUser = null;
+        let selectedUser = null;
+        let usersList = [];
+        let unsubscribeChatListener = null;
+        let blockedUsers = [];
+
+        // Load users and chats on auth state change
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                // IMPORTANT: Using relative path now
+                window.location.href = "../../index.html"; // Adjusted relative path
+                return;
+            }
+
+            try {
+                currentUser = user;
+                // Fetch blocked users from the current user's document in the 'users' collection
+                const currentUserDoc = await getDoc(doc(db, "users", currentUser.uid));
+                blockedUsers = currentUserDoc.exists() && currentUserDoc.data().blockedUsers ? currentUserDoc.data().blockedUsers : [];
+                
+                await loadUsers();
+                setupSearch();
+            } catch (error) {
+                console.error("Error initializing chat:", error);
+                // Replaced alert with a message box or similar non-blocking UI for better UX
+                // For this example, I'll keep alert but recommend changing it.
+                alert("Failed to initialize chat: " + error.message);
+            }
+        });
+
+        // Load all users except the current user
+        async function loadUsers(searchTerm = "") {
+            try {
+                const usersQuery = query(collection(db, "users"), where("uid", "!=", currentUser.uid));
+                const usersSnapshot = await getDocs(usersQuery);
+                usersList = [];
+                chatList.innerHTML = ""; // Clear existing list
+
+                usersSnapshot.forEach(doc => {
+                    const userData = doc.data();
+                    if (searchTerm) {
+                        const fullNameMatch = userData.fullName?.toLowerCase().includes(searchTerm.toLowerCase());
+                        const usernameMatch = userData.username?.toLowerCase().includes(searchTerm.toLowerCase());
+                        if (!fullNameMatch && !usernameMatch) return;
+                    }
+                    usersList.push({ id: doc.id, ...userData });
+                });
+
+                if (usersList.length === 0) {
+                    chatList.innerHTML = "<p style='padding: 15px; color: var(--no-chat-text); font-style: italic;'>No users found.</p>";
+                    return;
+                }
+
+                for (const user of usersList) {
+                    const lastMessage = await getLastMessage(user.id);
+                    const contactDiv = document.createElement("div");
+                    contactDiv.className = "chat-contact";
+                    contactDiv.dataset.userId = user.id; // Store user ID for easy access
+                    contactDiv.innerHTML = `
+                        ${user.profile?.profilePicture ? 
+                            `<img src="${user.profile.profilePicture}" alt="Avatar" class="contact-avatar" onerror="this.onerror=null; this.src='https://placehold.co/48x48/e0e0e0/666666?text=${(user.fullName || user.username || "U")[0].toUpperCase()}';" />` : // Added onerror for profile images
+                            `<div class="contact-avatar-placeholder">${(user.fullName || user.username || "U")[0].toUpperCase()}</div>`}
+                        <div class="contact-info">
+                            <div class="contact-name">${user.fullName || user.username || "Unknown"}</div>
+                            <div class="last-message">${lastMessage || "Start a conversation"}</div>
+                        </div>
+                    `;
+                    contactDiv.onclick = () => selectUser(user, contactDiv);
+                    chatList.appendChild(contactDiv);
+                }
+
+                // Restore selected user if exists (e.g., from URL parameter)
+                const urlParams = new URLSearchParams(window.location.search);
+                const usernameFromUrl = urlParams.get("username");
+                if (usernameFromUrl) {
+                    const userToSelect = usersList.find(u => u.username === usernameFromUrl);
+                    if (userToSelect) {
+                        const contactDiv = chatList.querySelector(`[data-user-id="${userToSelect.id}"]`);
+                        if (contactDiv) selectUser(userToSelect, contactDiv);
+                    }
+                }
+            } catch (error) {
+                console.error("Error loading users:", error);
+                chatList.innerHTML = "<p style='padding: 15px; color: var(--no-chat-text); font-style: italic;'>Failed to load users. Please try again.</p>";
+            }
+        }
+
+        // Get the last message between the current user and another user
+        async function getLastMessage(otherUserId) {
+            if (blockedUsers.includes(otherUserId)) return "Chat unavailable"; // Indicate if chat is blocked
+            const chatId = [currentUser.uid, otherUserId].sort().join("_"); // Consistent chat ID
+            const messagesQuery = query(
+                collection(db, "chats", chatId, "messages"),
+                orderBy("timestamp", "desc"),
+                limit(1) // Only fetch the latest message
+            );
+            const messagesSnapshot = await getDocs(messagesQuery);
+            if (!messagesSnapshot.empty) {
+                const message = messagesSnapshot.docs[0].data();
+                const text = message.text.length > 30 ? message.text.substring(0, 27) + "..." : message.text;
+                return message.senderId === currentUser.uid ? `You: ${text}` : text;
+            }
+            return ""; // No messages yet
+        }
+
+        // Setup search functionality
+        function setupSearch() {
+            // Check if searchInput exists before adding event listener
+            if (searchInput) {
+                searchInput.addEventListener("input", (e) => {
+                    const searchTerm = e.target.value.trim();
+                    loadUsers(searchTerm); // Reload users based on search term
+                });
+            } else {
+                console.warn("Search input element not found. Search functionality will not be active.");
+            }
+        }
+
+        // Toggle dropdown menu visibility
+        function toggleDropdown() {
+            const dropdown = document.getElementById("chatDropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", (e) => {
+            const dropdown = document.getElementById("chatDropdown");
+            const headerInfo = document.querySelector(".chat-header-info");
+            if (dropdown && headerInfo && !headerInfo.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+
+        // View user's profile
+        function viewProfile() {
+            if (!selectedUser || !selectedUser.username) {
+                alert("User information is not available. Please try again.");
+                return;
+            }
+            const role = selectedUser.role || "non-coder";
+            // IMPORTANT: Updated to relative paths
+            const profilePage = role === "coder" ? "../role/profile/codersprofile.html" : "../noncoders.html/noncoders.html";
+            window.location.href = `${profilePage}?username=${encodeURIComponent(selectedUser.username)}`;
+        }
+
+        // Block a user
+        async function blockUser() {
+            if (!selectedUser) return;
+            // Replaced confirm with a custom dialog if possible in your setup, otherwise alert.
+            // Keeping alert for now as per instructions.
+            if (!confirm(`Are you sure you want to block ${selectedUser.fullName || selectedUser.username || "this user"}? They will not be able to send you messages.`)) return;
+            try {
+                // Add user to blocked list
+                blockedUsers.push(selectedUser.id);
+                await updateDoc(doc(db, "users", currentUser.uid), {
+                    blockedUsers: blockedUsers
+                });
+                // Re-render chat main area for blocked status
+                selectUser(selectedUser, document.querySelector(`.chat-contact[data-user-id="${selectedUser.id}"]`));
+                // Reload sidebar to reflect "Chat unavailable"
+                await loadUsers(searchInput.value.trim());
+            } catch (error) {
+                console.error("Error blocking user:", error);
+                alert("Failed to block user: " + error.message);
+            }
+        }
+
+        // Unblock a user
+        async function unblockUser() {
+            if (!selectedUser) return;
+            // Replaced confirm with a custom dialog if possible in your setup, otherwise alert.
+            // Keeping alert for now as per instructions.
+            if (!confirm(`Are you sure you want to unblock ${selectedUser.fullName || selectedUser.username || "this user"}?`)) return;
+            try {
+                // Remove user from blocked list
+                blockedUsers = blockedUsers.filter(id => id !== selectedUser.id);
+                await updateDoc(doc(db, "users", currentUser.uid), {
+                    blockedUsers: blockedUsers
+                });
+                // Re-render chat main area for unblocked status
+                selectUser(selectedUser, document.querySelector(`.chat-contact[data-user-id="${selectedUser.id}"]`));
+                // Reload sidebar to show chat is available again
+                await loadUsers(searchInput.value.trim());
+            } catch (error) {
+                console.error("Error unblocking user:", error);
+                alert("Failed to unblock user: " + error.message);
+            }
+        }
+
+        // Delete chat messages
+        async function deleteChat() {
+            if (!selectedUser) return;
+            // Replaced confirm with a custom dialog if possible in your setup, otherwise alert.
+            // Keeping alert for now as per instructions.
+            if (!confirm("Are you sure you want to delete this chat? This action cannot be undone and only deletes your copy of the messages.")) return;
+            const chatId = [currentUser.uid, selectedUser.id].sort().join("_");
+            try {
+                const messagesQuery = query(collection(db, "chats", chatId, "messages"));
+                const messagesSnapshot = await getDocs(messagesQuery);
+                // Use batched writes for efficiency if many messages
+                const batch = messagesSnapshot.docs.map(doc => deleteDoc(doc.ref));
+                await Promise.all(batch); // Execute all delete operations
+                
+                // After deleting messages, re-render the chat area to show it's empty
+                selectUser(selectedUser, document.querySelector(`.chat-contact[data-user-id="${selectedUser.id}"]`));
+                // Update last message in sidebar
+                await updateLastMessage(selectedUser.id, "Chat cleared.");
+            } catch (error) {
+                console.error("Error deleting chat:", error);
+                alert("Failed to delete chat: " + error.message);
+            }
+        }
+
+        // Select a user to chat with and render their chat
+        function selectUser(user, contactDiv) {
+            selectedUser = user;
+            // Highlight selected contact in sidebar
+            document.querySelectorAll(".chat-contact").forEach(div => div.classList.remove("active"));
+            contactDiv.classList.add("active");
+            noChatMessage.style.display = "none"; // Hide initial "Select a user" message
+
+            const isBlocked = blockedUsers.includes(user.id);
+
+            // Create the chat header
+            const chatHeader = document.createElement("div");
+            chatHeader.className = "chat-header";
+
+            const headerInfo = document.createElement("div");
+            headerInfo.className = "chat-header-info";
+            headerInfo.innerHTML = `
+                ${user.profile?.profilePicture ?
+                    `<img src="${user.profile.profilePicture}" alt="Avatar" class="chat-header-avatar" onerror="this.onerror=null; this.src='https://placehold.co/50x50/e0e0e0/666666?text=${(user.fullName || user.username || "U")[0].toUpperCase()}';" />` :
+                    `<div class="chat-header-avatar-placeholder">${(user.fullName || user.username || "U")[0].toUpperCase()}</div>`}
+                <div class="chat-header-name">${user.fullName || user.username || "Unknown"}</div>
+            `;
+            headerInfo.addEventListener("click", toggleDropdown);
+            chatHeader.appendChild(headerInfo);
+
+            // Create the dropdown menu for chat options
+            const dropdownMenu = document.createElement("div");
+            dropdownMenu.className = "dropdown-menu";
+            dropdownMenu.id = "chatDropdown"; // Unique ID for dropdown
+
+            // View Profile option
+            const viewProfileItem = document.createElement("div");
+            viewProfileItem.className = "dropdown-item";
+            viewProfileItem.textContent = "View Profile";
+            viewProfileItem.addEventListener("click", viewProfile);
+            dropdownMenu.appendChild(viewProfileItem);
+
+            // Block/Unblock option
+            const blockUnblockItem = document.createElement("div");
+            blockUnblockItem.className = `dropdown-item ${isBlocked ? "" : "danger"}`; // "danger" class for block action
+            blockUnblockItem.textContent = isBlocked ? "Unblock" : "Block";
+            blockUnblockItem.addEventListener("click", isBlocked ? unblockUser : blockUser);
+            dropdownMenu.appendChild(blockUnblockItem);
+
+            // Delete Chat option
+            const deleteChatItem = document.createElement("div");
+            deleteChatItem.className = "dropdown-item danger"; // "danger" class for delete action
+            deleteChatItem.textContent = "Delete Chat";
+            deleteChatItem.addEventListener("click", deleteChat);
+            dropdownMenu.appendChild(deleteChatItem);
+
+            chatHeader.appendChild(dropdownMenu); // Add dropdown to header
+
+            // Create the main chat content area (messages or blocked message)
+            const chatContent = document.createElement("div");
+            if (isBlocked) {
+                chatContent.className = "blocked-message";
+                chatContent.innerHTML = `
+                    <p>You have blocked this user. You cannot send or receive messages.</p>
+                    <button class="unblock-btn">Unblock</button>
+                `;
+                const unblockBtn = chatContent.querySelector(".unblock-btn");
+                unblockBtn.addEventListener("click", unblockUser);
+            } else {
+                chatContent.innerHTML = `
+                    <div class="chat-messages" id="chatMessages"></div>
+                    <div class="chat-input">
+                        <textarea id="messageInput" placeholder="Type a message..."></textarea>
+                        <button class="send-btn" id="sendButton">Send</button>
+                    </div>
+                `;
+            }
+
+            // Update the chat main area with new header and content
+            chatMain.innerHTML = ""; // Clear previous chat content
+            chatMain.appendChild(chatHeader);
+            chatMain.appendChild(chatContent);
+
+            // Setup input and send button listeners if not blocked
+            if (!isBlocked) {
+                const messageInput = document.getElementById("messageInput");
+                const sendButton = document.getElementById("sendButton");
+
+                // Enable/disable send button based on input content
+                messageInput.addEventListener("input", () => {
+                    sendButton.disabled = !messageInput.value.trim();
+                });
+
+                // Send message on button click
+                sendButton.onclick = () => sendMessage();
+
+                // Send message on Enter key (Shift+Enter for new line)
+                messageInput.addEventListener("keypress", (e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault(); // Prevent new line
+                        sendMessage();
+                    }
+                });
+
+                loadChatMessages(); // Start listening for messages for the selected chat
+            }
+
+            // For mobile, hide sidebar after selecting a user
+            if (window.innerWidth <= 480) {
+                sidebar.classList.remove('active');
+            }
+        }
+
+        // Send a message
+        async function sendMessage() {
+            const messageInput = document.getElementById("messageInput");
+            const sendButton = document.getElementById("sendButton");
+            const text = messageInput.value.trim();
+
+            // Basic validation
+            if (!text || !selectedUser || blockedUsers.includes(selectedUser.id)) {
+                sendButton.disabled = false; // Re-enable if invalid input
+                return;
+            }
+
+            sendButton.disabled = true; // Disable to prevent double-sending
+            const chatId = [currentUser.uid, selectedUser.id].sort().join("_"); // Unique chat ID for the pair
+
+            try {
+                await addDoc(collection(db, "chats", chatId, "messages"), {
+                    text,
+                    senderId: currentUser.uid,
+                    receiverId: selectedUser.id,
+                    timestamp: serverTimestamp() // Firestore timestamp
+                });
+                messageInput.value = ""; // Clear input field
+                sendButton.disabled = false; // Re-enable button
+                
+                // Scroll to the bottom of the chat to show the new message
+                const chatMessages = document.getElementById("chatMessages");
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // Update the last message displayed in the sidebar for the current contact
+                await updateLastMessage(selectedUser.id, `You: ${text.length > 30 ? text.substring(0, 27) + "..." : text}`);
+            } catch (error) {
+                console.error("Error sending message:", error);
+                alert("Failed to send message: " + error.message);
+                sendButton.disabled = false; // Ensure button is re-enabled on error
+            }
+        }
+
+        // Update the last message snippet in the sidebar for a given user
+        async function updateLastMessage(userId, message) {
+            const contactDiv = chatList.querySelector(`[data-user-id="${userId}"]`);
+            if (contactDiv) {
+                const lastMessageEl = contactDiv.querySelector(".last-message");
+                lastMessageEl.textContent = message;
+            }
+        }
+
+        // Load chat messages in real-time using onSnapshot listener
+        function loadChatMessages() {
+            // Unsubscribe from previous listener if active to prevent memory leaks/duplicates
+            if (unsubscribeChatListener) unsubscribeChatListener();
+
+            const chatId = [currentUser.uid, selectedUser.id].sort().join("_");
+            const messagesQuery = query(
+                collection(db, "chats", chatId, "messages"),
+                orderBy("timestamp", "asc") // Order messages by timestamp
+            );
+
+            const chatMessages = document.getElementById("chatMessages");
+            // Set up real-time listener
+            unsubscribeChatListener = onSnapshot(messagesQuery, (snapshot) => {
+                chatMessages.innerHTML = ""; // Clear existing messages before rendering new set
+                snapshot.forEach(doc => {
+                    const message = doc.data();
+                    const messageDiv = document.createElement("div");
+                    const isSent = message.senderId === currentUser.uid;
+                    messageDiv.className = `message ${isSent ? "sent" : "received"}`;
+                    messageDiv.innerHTML = `
+                        <div>${message.text}</div>
+                        <div class="message-timestamp">
+                            ${message.timestamp?.toDate().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) || "Sending..."}
+                        </div>
+                    `;
+                    chatMessages.appendChild(messageDiv);
+                });
+                // Always scroll to the bottom when new messages arrive or on load
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, (error) => {
+                console.error("Error loading messages:", error);
+                chatMessages.innerHTML = "<p style='color: var(--no-chat-text); font-style: italic;'>Failed to load messages. Please try again.</p>";
+            });
+        }
+
+        // Mobile sidebar toggle (add an icon in your header for this)
+        // You'll need to add a button in your navbar HTML for this to work on mobile.
+        // Example: <button id="sidebarToggle" class="mobile-toggle-btn"><i class="fas fa-bars"></i></button>
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>

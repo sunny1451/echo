@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post - Echo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #f0f2f5, #e6f0fa);
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      background: #262626;
+      padding: 15px 30px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      color: #fff;
+      font-size: 28px;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 1.5px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-buttons button {
+      background: none;
+      border: 2px solid #fff;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .nav-buttons button:hover {
+      background: #fff;
+      color: #262626;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .post-container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 30px;
+      display: flex;
+      gap: 30px;
+    }
+
+    .image-section {
+      flex: 1;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+      position: relative;
+      min-height: 300px; /* Ensure frame height for centering */
+    }
+
+    .image-section:hover {
+      transform: translateY(-5px);
+    }
+
+    .image-section img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-upload-icon {
+      width: 100px;
+      height: 100px;
+      background: url('https://cdn-icons-png.flaticon.com/512/5394/5394326.png') no-repeat center;
+      background-size: contain;
+      cursor: pointer;
+      margin: 50px auto 0; /* Center vertically in the frame */
+    }
+
+    .remove-image {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 20px;
+      height: 20px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg>') no-repeat center;
+      background-size: contain;
+      cursor: pointer;
+      display: none;
+    }
+
+    .image-section:hover .remove-image {
+      display: block;
+    }
+
+    .image-section img + .remove-image {
+      display: block;
+    }
+
+    .details-section {
+      flex: 2;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .details-section:hover {
+      transform: translateY(-5px);
+    }
+
+    .details-section h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #262626;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 10px;
+    }
+
+    .details-section label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .details-section input,
+    .details-section textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
+
+    .details-section input:focus,
+    .details-section textarea:focus {
+      border-color: #0095f6;
+      outline: none;
+      box-shadow: 0 0 5px rgba(0, 149, 246, 0.3);
+    }
+
+    .details-section textarea {
+      height: 150px;
+      resize: vertical;
+    }
+
+    .post-button {
+      background: #0095f6;
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+
+    .post-button:hover {
+      background: #007bb5;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">Echo</a>
+      <div class="nav-buttons">
+        <button onclick="window.location.href='posthistory.html'">Post History</button>
+        <button onclick="window.location.href='comments.html'">Comments</button>
+        <button onclick="window.location.href='likes.html'">Likes</button>
+      </div>
+    </nav>
+
+  <div class="post-container">
+    <div class="image-section">
+      <h2>Upload Project Image</h2>
+      <div class="remove-image" onclick="removeImage()"></div>
+      <input type="file" id="postImage" accept="image/*" style="display: none;" />
+      <div class="image-upload-icon" onclick="document.getElementById('postImage').click()"></div>
+      <img id="previewImage" src="https://via.placeholder.com/300x400" alt="Preview" style="display: none;" />
+    </div>
+    <div class="details-section">
+      <h2>Project Details</h2>
+      <label for="ideaTitle">Idea Title</label>
+      <input type="text" id="ideaTitle" placeholder="Enter idea title" />
+
+      <label for="problemSolving">Problem it's solving</label>
+      <input type="text" id="problemSolving" placeholder="Describe the problem" />
+
+      <label for="targetUsers">Target Users</label>
+      <input type="text" id="targetUsers" placeholder="Who will use this?" />
+
+      <label for="description">Description</label>
+      <textarea id="description" placeholder="Add project details"></textarea>
+
+      <button class="post-button" onclick="postIdea()">Post</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { Upload } from "https://cdn.jsdelivr.net/npm/@imagekitio/js-sdk@latest/dist/imagekit.esm.min.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFoIoUsTJ_4NzkV-sdNffAOjbHRxSRIp8",
+      authDomain: "echo-625fa.firebaseapp.com",
+      projectId: "echo-625fa",
+      storageBucket: "echo-625fa.appspot.com",
+      messagingSenderId: "890702112097",
+      appId: "1:890702112097:web:e81927ba359a8c426c1120",
+      measurementId: "G-DMBW4N7J2T"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const IMAGEKIT_PUBLIC_KEY = 'public_kVKXQSuwDPXHQEV2SP1zrkVDgAM=';
+    const IMAGEKIT_URL_ENDPOINT = 'https://ik.imagekit.io/RentaLRoomS/';
+    const UPLOAD_PRESET = 'client_upload_preset'; // Replace with your upload preset name
+
+    // Initialize ImageKit with upload preset
+    const imagekit = new Upload({
+      publicKey: IMAGEKIT_PUBLIC_KEY,
+      urlEndpoint: IMAGEKIT_URL_ENDPOINT,
+    });
+
+    const postImage = document.getElementById('postImage');
+    const previewImage = document.getElementById('previewImage');
+    let currentUser = null;
+
+    // Preview image
+    postImage.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          previewImage.src = event.target.result;
+          previewImage.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Remove image
+    window.removeImage = function() {
+      previewImage.style.display = 'none';
+      previewImage.src = 'https://via.placeholder.com/300x400';
+      postImage.value = ''; // Clear file input
+    };
+
+    // Upload image to ImageKit
+    async function uploadToImageKit(file) {
+      try {
+        const response = await imagekit.upload({
+          file: file,
+          fileName: `post_${Date.now()}_${file.name}`,
+          useUniqueFileName: true,
+          tags: ['post_image'],
+          uploadPreset: UPLOAD_PRESET, // Use the upload preset
+        });
+        console.log('ImageKit upload response:', response);
+        return response.url;
+      } catch (error) {
+        console.error('ImageKit upload error:', error);
+        alert('Image upload failed. Check console for details.');
+        return '';
+      }
+    }
+
+    // Post idea to Firestore and redirect
+    window.postIdea = async function() { // Ensure global scope
+      if (!currentUser) {
+        alert("Please log in to post an idea.");
+        return;
+      }
+
+      const ideaTitle = document.getElementById('ideaTitle').value.trim();
+      const problemSolving = document.getElementById('problemSolving').value.trim();
+      const targetUsers = document.getElementById('targetUsers').value.trim();
+      const description = document.getElementById('description').value.trim();
+      let imageUrl = previewImage.src === 'https://via.placeholder.com/300x400' ? '' : previewImage.src;
+
+      // Allow posting with at least one detail or image
+      if (!ideaTitle && !problemSolving && !targetUsers && !description && !imageUrl) {
+        alert("Please provide at least one detail or an image.");
+        return;
+      }
+
+      try {
+        let finalImageUrl = imageUrl;
+        if (postImage.files[0]) {
+          finalImageUrl = await uploadToImageKit(postImage.files[0]); // Upload to ImageKit
+          if (!finalImageUrl) {
+            alert("Image upload failed, proceeding without image.");
+          }
+        }
+
+        const postData = {
+          userId: currentUser.uid,
+          ideaTitle,
+          problemSolving,
+          targetUsers,
+          description,
+          imageUrl: finalImageUrl,
+          timestamp: new Date().toISOString(),
+        };
+
+        // Save to posts collection
+        const postsRef = collection(db, "posts");
+        const docRef = await addDoc(postsRef, postData);
+        console.log("Post saved with ID: ", docRef.id);
+
+        // Optionally update users collection with post reference
+        const userRef = doc(db, "users", currentUser.uid);
+        await updateDoc(userRef, {
+          posts: [docRef.id, ...(currentUser.posts || [])]
+        });
+
+        alert("Post submitted successfully!");
+        // Redirect to user's post history page
+        window.location.href = `posthistory.html?userId=${currentUser.uid}`;
+      } catch (error) {
+        console.error("Error posting idea:", error);
+        alert("Failed to post idea. Please try again.");
+      }
+    };
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+      currentUser = user;
+    });
+  </script>
+</body>
+</html>
