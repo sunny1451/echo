@@ -7,26 +7,22 @@
     <!-- Font Awesome for icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        /* Import Google Fonts - Pacifico for logo/handwritten style, Inter for general text */
         @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-        /* Define primary accent colors for reusability based on the provided header */
         :root {
-            --light-background: #f5f5f5; /* Light grey background from user's provided code */
-            --text-color-dark: #1f2a44; /* Dark grey-blue for main text */
-            --accent-green: #2da44e; /* The primary vibrant green */
-            --accent-green-dark: #218739; /* Darker green for hover */
-            --accent-light-bg: #f0f2f5; /* Very light grey for subtle backgrounds/hovers */
-            --border-light: #d0d7de; /* Light grey for borders */
-            --shadow-light: rgba(0, 0, 0, 0.1); /* Subtle shadow */
-
-            /* Colors specific to this chat page that align with the base theme */
-            --chat-sidebar-bg: #f5f5f5; /* Matches base light background */
-            --chat-border-color: #e0e0e0; /* Slightly darker than base --border-light */
+            --light-background: #f5f5f5;
+            --text-color-dark: #1f2a44;
+            --accent-green: #2da44e;
+            --accent-green-dark: #218739;
+            --accent-light-bg: #f0f2f5;
+            --border-light: #d0d7de;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --chat-sidebar-bg: #f5f5f5;
+            --chat-border-color: #e0e0e0;
             --chat-contact-hover-bg: #fafafa;
-            --chat-contact-active-bg: #e6f4ea; /* Light green tint */
-            --message-sent-bg: #e6f4ea; /* Matches active contact bg */
+            --chat-contact-active-bg: #e6f4ea;
+            --message-sent-bg: #e6f4ea;
             --message-received-bg: #f0f0f0;
             --message-timestamp-color: #999999;
             --chat-input-bg: #fafafa;
@@ -38,30 +34,27 @@
             --danger-color: #dc3545;
         }
 
-        /* Universal Box-Sizing and Font Reset */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', sans-serif; /* Default text font for overall consistency */
+            font-family: 'Inter', sans-serif;
         }
 
-        /* Body and Overall Layout - Aligns with the new header's light theme */
         body {
             background-color: var(--light-background);
             color: var(--text-color-dark);
             line-height: 1.6;
             min-height: 100vh;
-            overflow: hidden; /* Keep hidden for chat layout */
+            overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
-        /* Navigation Bar Styles (from your provided code) */
         .navbar {
             background: #ffffff;
             padding: 12px 20px;
-            position: fixed; /* Changed to fixed for consistency across pages using this style */
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
@@ -126,17 +119,14 @@
             filter: brightness(0) invert(1);
         }
 
-        /* Chat Specific Styles */
         .chat-container {
             display: flex;
             flex: 1;
-            /* Adjusted height to account for fixed navbar height (~48px + margin = ~60px) */
             height: calc(100vh - 60px);
-            margin-top: 60px; /* Push content down below fixed navbar */
+            margin-top: 60px;
             overflow: hidden;
         }
 
-        /* Left Sidebar */
         .sidebar {
             width: 350px;
             background-color: var(--chat-sidebar-bg);
@@ -150,14 +140,15 @@
             padding: 15px;
             background-color: #ffffff;
             border-bottom: 1px solid var(--chat-border-color);
+            position: relative;
         }
 
         .search-bar input {
             width: 100%;
             padding: 10px 15px;
-            border: 1px solid var(--chat-border-color);
+            border: 1px solid var(--chat-input-border);
             border-radius: 20px;
-            background-color: var(--chat-contact-hover-bg); /* Use a light variant */
+            background-color: var(--chat-contact-hover-bg);
             color: var(--text-color-dark);
             font-size: 14px;
             outline: none;
@@ -165,6 +156,30 @@
 
         .search-bar input::placeholder {
             color: var(--chat-input-placeholder);
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            border: 1px solid var(--chat-border-color);
+            border-radius: 0 0 20px 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 10;
+        }
+
+        .search-suggestion {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .search-suggestion:hover {
+            background-color: var(--chat-contact-hover-bg);
         }
 
         .chat-list {
@@ -206,7 +221,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 12px;
             color: var(--message-timestamp-color);
             font-size: 12px;
             font-weight: 500;
@@ -225,6 +239,12 @@
             margin-bottom: 4px;
         }
 
+        .message-count-badge {
+            font-size: 12px;
+            color: var(--accent-green);
+            margin-left: 5px;
+        }
+
         .last-message {
             font-size: 13px;
             color: var(--text-color-medium);
@@ -233,7 +253,6 @@
             text-overflow: ellipsis;
         }
 
-        /* Main Chat Area */
         .chat-main {
             flex: 1;
             display: flex;
@@ -247,7 +266,7 @@
             padding: 12px 20px;
             background-color: #ffffff;
             border-bottom: 1px solid var(--chat-border-color);
-            display: flex;
+            display: none;
             align-items: center;
             gap: 15px;
             position: relative;
@@ -269,23 +288,16 @@
             border: 1px solid var(--chat-border-color);
         }
 
-        .chat-header-avatar-placeholder {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: var(--chat-border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--message-timestamp-color);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
         .chat-header-name {
             font-size: 18px;
             font-weight: 600;
             color: var(--text-color-dark);
+        }
+
+        .message-count {
+            font-size: 14px;
+            color: var(--accent-green);
+            margin-left: 10px;
         }
 
         .dropdown-menu {
@@ -323,7 +335,6 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin-bottom: 0;
         }
 
         .message {
@@ -373,7 +384,7 @@
 
         .chat-input textarea {
             flex: 1;
-            padding: 10px 15px;
+            padding: 12px 15px;
             border: 1px solid var(--chat-input-border);
             border-radius: 20px;
             background-color: #ffffff;
@@ -381,9 +392,8 @@
             font-size: 14px;
             resize: none;
             outline: none;
-            height: 44px;
-            line-height: 1.5;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            height: 48px;
+            margin-right: 10px;
         }
 
         .chat-input textarea::placeholder {
@@ -391,7 +401,7 @@
         }
 
         .send-btn {
-            padding: 10px 24px;
+            padding: 12px 24px;
             background-color: var(--accent-green);
             color: #ffffff;
             border: none;
@@ -399,11 +409,12 @@
             cursor: pointer;
             font-weight: 600;
             font-size: 14px;
-            height: 44px;
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: background-color 0.3s ease;
+            white-space: nowrap;
         }
 
         .send-btn:hover {
@@ -454,20 +465,19 @@
             background-color: var(--accent-green-dark);
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .navbar {
-                padding: 12px 15px; /* Adjusted for smaller screens */
+                padding: 12px 15px;
             }
             .nav-logo {
-                font-size: 20px; /* Smaller logo */
+                font-size: 20px;
             }
             .nav-links {
-                gap: 10px; /* Reduced gap */
+                gap: 10px;
             }
             .nav-links a {
-                font-size: 13px; /* Smaller font */
-                padding: 6px 10px; /* Smaller padding */
+                font-size: 13px;
+                padding: 6px 10px;
                 gap: 4px;
             }
             .nav-links img {
@@ -475,27 +485,25 @@
                 height: 16px;
             }
             .chat-container {
-                height: calc(100vh - 55px); /* Adjusted for smaller navbar */
-                margin-top: 55px; /* Push content down below fixed navbar */
+                height: calc(100vh - 55px);
+                margin-top: 55px;
             }
             .sidebar {
                 width: 300px;
             }
-
             .chat-input {
-                padding: 10px 15px;
+                padding: 12px 15px;
                 gap: 8px;
             }
-
             .chat-input textarea {
                 font-size: 13px;
-                height: 40px;
+                height: 44px;
+                margin-right: 8px;
             }
-
             .send-btn {
-                padding: 8px 20px;
+                padding: 10px 20px;
                 font-size: 13px;
-                height: 40px;
+                height: 44px;
             }
         }
 
@@ -516,40 +524,37 @@
                 padding: 5px 8px;
             }
             .chat-container {
-                height: calc(100vh - 50px); /* Further adjusted */
-                margin-top: 50px; /* Further adjusted */
+                height: calc(100vh - 50px);
+                margin-top: 50px;
             }
             .sidebar {
                 width: 100%;
                 max-width: 250px;
-                position: absolute; /* Allows it to overlap main chat on small screens */
+                position: absolute;
                 height: 100%;
-                z-index: 2; /* Bring sidebar forward */
-                transform: translateX(-100%); /* Hidden by default */
+                z-index: 2;
+                transform: translateX(-100%);
                 transition: transform 0.3s ease-in-out;
             }
             .sidebar.active {
-                transform: translateX(0); /* Show sidebar */
+                transform: translateX(0);
             }
-
             .chat-header-name {
                 font-size: 16px;
             }
-
             .chat-input {
-                padding: 8px 10px;
+                padding: 10px 10px;
                 gap: 6px;
             }
-
             .chat-input textarea {
                 font-size: 12px;
-                height: 36px;
+                height: 40px;
+                margin-right: 6px;
             }
-
             .send-btn {
-                padding: 6px 16px;
+                padding: 8px 16px;
                 font-size: 12px;
-                height: 36px;
+                height: 40px;
             }
         }
     </style>
@@ -558,34 +563,33 @@
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="https://sunny1451.github.io/echo/" class="nav-logo">Echo</a>
+            <a href="../../index.html" class="nav-logo">Echo</a>
             <div class="nav-links">
-                <!-- Converted to relative paths -->
-                <a href="https://sunny1451.github.io/echo/search.html">
+                <a href="../role/profile/search/search.html">
                     <img src="https://cdn-icons-png.flaticon.com/512/3917/3917132.png" alt="Search Icon" />
                     Search
                 </a>
-                <a href="https://sunny1451.github.io/echo/posts.html">
+                <a href="posts.html">
                     <img src="https://cdn-icons-png.flaticon.com/512/9350/9350064.png" alt="Posts Icon" />
                     Posts
                 </a>
-                <a href="https://sunny1451.github.io/echo/settings.html">
+                <a href="settings.html">
                     <img src="https://cdn-icons-png.flaticon.com/512/4508/4508440.png" alt="Settings Icon" />
                     Settings
                 </a>
-                <a href="https://sunny1451.github.io/echo/codersprofile.html">
+                <a href="../role/profile/codersprofile.html">
                     <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Profile Icon" />
                     Profile
                 </a>
-                <a href="https://sunny1451.github.io/echo/message.html" class="active">
+                <a href="message.html" class="active">
                     <img src="https://cdn-icons-png.flaticon.com/512/893/893257.png" alt="Chats Icon" />
                     Chats
                 </a>
-                <a href="https://sunny1451.github.io/echo/reels.html">
+                <a href="reels.html">
                     <img src="https://cdn-icons-png.flaticon.com/512/4379/4379560.png" alt="Reels Icon" />
                     Reels
                 </a>
-                <a href="https://sunny1451.github.io/echo/portfolio.html">
+                <a href="portfolio.html">
                     <img src="https://cdn-icons-png.flaticon.com/512/10493/10493865.png" alt="Portfolio Icon" />
                     Portfolio
                 </a>
@@ -598,6 +602,7 @@
         <div class="sidebar" id="sidebar">
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="Search users..." />
+                <div class="search-suggestions" id="searchSuggestions"></div>
             </div>
             <div class="chat-list" id="chatList">
                 <!-- Chat contacts will be dynamically added here -->
@@ -606,19 +611,34 @@
 
         <!-- Main Chat Area -->
         <div class="chat-main" id="chatMain">
-            <div class="no-chat-selected" id="noChatMessage">
+            <div class="chat-header" id="chatHeader">
+                <div class="chat-header-info" id="headerInfo">
+                    <img src="" alt="Avatar" class="chat-header-avatar" id="chatHeaderAvatar" onclick="selectChat()">
+                    <div class="chat-header-name" id="chatHeaderName" onclick="selectChat()">Select a user to start chatting</div>
+                    <span class="message-count" id="messageCount">0</span>
+                </div>
+                <div class="dropdown-menu" id="chatDropdown" style="display: none;">
+                    <div class="dropdown-item" id="viewProfileBtn">View Profile</div>
+                    <div class="dropdown-item" id="blockUnblockBtn">Block</div>
+                    <div class="dropdown-item danger" id="deleteChatBtn">Delete Chat</div>
+                </div>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input">
+                <textarea id="messageInput" placeholder="Type a message..."></textarea>
+                <button class="send-btn" id="sendButton" disabled>Send</button>
+            </div>
+            <div class="no-chat-selected" id="noChatMessage" style="display: none;">
                 Select a user to start chatting
             </div>
         </div>
     </div>
 
     <script type="module">
-        // Firebase imports
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
         import { getFirestore, collection, query, where, getDocs, doc, getDoc, onSnapshot, addDoc, serverTimestamp, orderBy, limit, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBFoIoUsTJ_4NzkV-sdNffAOjbHRxSRIp8",
             authDomain: "echo-625fa.firebaseapp.com",
@@ -629,56 +649,55 @@
             measurementId: "G-DMBW4N7J2T"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // DOM elements
         const chatList = document.getElementById("chatList");
         const chatMain = document.getElementById("chatMain");
         const searchInput = document.getElementById("searchInput");
+        const searchSuggestions = document.getElementById("searchSuggestions");
         const noChatMessage = document.getElementById("noChatMessage");
-        const sidebar = document.getElementById("sidebar"); // Added for mobile toggling
+        const chatHeader = document.getElementById("chatHeader");
+        const headerInfo = document.getElementById("headerInfo");
+        const chatHeaderAvatar = document.getElementById("chatHeaderAvatar");
+        const chatHeaderName = document.getElementById("chatHeaderName");
+        const messageCount = document.getElementById("messageCount");
+        const chatMessages = document.getElementById("chatMessages");
+        const messageInput = document.getElementById("messageInput");
+        const sendButton = document.getElementById("sendButton");
+        const chatDropdown = document.getElementById("chatDropdown");
+        const viewProfileBtn = document.getElementById("viewProfileBtn");
+        const blockUnblockBtn = document.getElementById("blockUnblockBtn");
+        const deleteChatBtn = document.getElementById("deleteChatBtn");
+        const sidebar = document.getElementById("sidebar");
 
-        // Global state
         let currentUser = null;
         let selectedUser = null;
         let usersList = [];
         let unsubscribeChatListener = null;
         let blockedUsers = [];
 
-        // Load users and chats on auth state change
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
-                // IMPORTANT: Using relative path now
-                window.location.href = "https://sunny1451.github.io/echo/"; // Adjusted relative path
+                window.location.href = "../../index.html";
                 return;
             }
 
-            try {
-                currentUser = user;
-                // Fetch blocked users from the current user's document in the 'users' collection
-                const currentUserDoc = await getDoc(doc(db, "users", currentUser.uid));
-                blockedUsers = currentUserDoc.exists() && currentUserDoc.data().blockedUsers ? currentUserDoc.data().blockedUsers : [];
-                
-                await loadUsers();
-                setupSearch();
-            } catch (error) {
-                console.error("Error initializing chat:", error);
-                // Replaced alert with a message box or similar non-blocking UI for better UX
-                // For this example, I'll keep alert but recommend changing it.
-                alert("Failed to initialize chat: " + error.message);
-            }
+            currentUser = user;
+            const currentUserDoc = await getDoc(doc(db, "users", currentUser.uid));
+            blockedUsers = currentUserDoc.exists() && currentUserDoc.data().blockedUsers ? currentUserDoc.data().blockedUsers : [];
+            
+            await loadUsers();
+            setupSearch();
         });
 
-        // Load all users except the current user
         async function loadUsers(searchTerm = "") {
             try {
                 const usersQuery = query(collection(db, "users"), where("uid", "!=", currentUser.uid));
                 const usersSnapshot = await getDocs(usersQuery);
                 usersList = [];
-                chatList.innerHTML = ""; // Clear existing list
+                chatList.innerHTML = "";
 
                 usersSnapshot.forEach(doc => {
                     const userData = doc.data();
@@ -696,32 +715,21 @@
                 }
 
                 for (const user of usersList) {
-                    const lastMessage = await getLastMessage(user.id);
+                    const messageCount = await getMessageCount(user.id);
                     const contactDiv = document.createElement("div");
                     contactDiv.className = "chat-contact";
-                    contactDiv.dataset.userId = user.id; // Store user ID for easy access
+                    contactDiv.dataset.userId = user.id;
                     contactDiv.innerHTML = `
                         ${user.profile?.profilePicture ? 
-                            `<img src="${user.profile.profilePicture}" alt="Avatar" class="contact-avatar" onerror="this.onerror=null; this.src='https://placehold.co/48x48/e0e0e0/666666?text=${(user.fullName || user.username || "U")[0].toUpperCase()}';" />` : // Added onerror for profile images
+                            `<img src="${user.profile.profilePicture}" alt="Avatar" class="contact-avatar" onerror="this.onerror=null; this.src='https://placehold.co/48x48/e0e0e0/666666?text=${(user.fullName || user.username || "U")[0].toUpperCase()}';" />` : 
                             `<div class="contact-avatar-placeholder">${(user.fullName || user.username || "U")[0].toUpperCase()}</div>`}
                         <div class="contact-info">
-                            <div class="contact-name">${user.fullName || user.username || "Unknown"}</div>
-                            <div class="last-message">${lastMessage || "Start a conversation"}</div>
+                            <div class="contact-name">${user.fullName || user.username || "Unknown"} <span class="message-count-badge">${messageCount > 0 ? `(${messageCount})` : ""}</span></div>
+                            <div class="last-message">${await getLastMessage(user.id) || "Start a conversation"}</div>
                         </div>
                     `;
                     contactDiv.onclick = () => selectUser(user, contactDiv);
                     chatList.appendChild(contactDiv);
-                }
-
-                // Restore selected user if exists (e.g., from URL parameter)
-                const urlParams = new URLSearchParams(window.location.search);
-                const usernameFromUrl = urlParams.get("username");
-                if (usernameFromUrl) {
-                    const userToSelect = usersList.find(u => u.username === usernameFromUrl);
-                    if (userToSelect) {
-                        const contactDiv = chatList.querySelector(`[data-user-id="${userToSelect.id}"]`);
-                        if (contactDiv) selectUser(userToSelect, contactDiv);
-                    }
                 }
             } catch (error) {
                 console.error("Error loading users:", error);
@@ -729,79 +737,93 @@
             }
         }
 
-        // Get the last message between the current user and another user
+        async function getMessageCount(otherUserId) {
+            const chatId = [currentUser.uid, otherUserId].sort().join("_");
+            const messagesQuery = query(collection(db, "chats", chatId, "messages"), where("receiverId", "==", currentUser.uid));
+            const messagesSnapshot = await getDocs(messagesQuery);
+            return messagesSnapshot.size;
+        }
+
         async function getLastMessage(otherUserId) {
-            if (blockedUsers.includes(otherUserId)) return "Chat unavailable"; // Indicate if chat is blocked
-            const chatId = [currentUser.uid, otherUserId].sort().join("_"); // Consistent chat ID
-            const messagesQuery = query(
-                collection(db, "chats", chatId, "messages"),
-                orderBy("timestamp", "desc"),
-                limit(1) // Only fetch the latest message
-            );
+            if (blockedUsers.includes(otherUserId)) return "Chat unavailable";
+            const chatId = [currentUser.uid, otherUserId].sort().join("_");
+            const messagesQuery = query(collection(db, "chats", chatId, "messages"), orderBy("timestamp", "desc"), limit(1));
             const messagesSnapshot = await getDocs(messagesQuery);
             if (!messagesSnapshot.empty) {
                 const message = messagesSnapshot.docs[0].data();
                 const text = message.text.length > 30 ? message.text.substring(0, 27) + "..." : message.text;
                 return message.senderId === currentUser.uid ? `You: ${text}` : text;
             }
-            return ""; // No messages yet
+            return "";
         }
 
-        // Setup search functionality
         function setupSearch() {
-            // Check if searchInput exists before adding event listener
-            if (searchInput) {
-                searchInput.addEventListener("input", (e) => {
-                    const searchTerm = e.target.value.trim();
-                    loadUsers(searchTerm); // Reload users based on search term
+            if (searchInput && searchSuggestions) {
+                searchInput.addEventListener("input", async (e) => {
+                    const searchTerm = e.target.value.trim().toLowerCase();
+                    searchSuggestions.innerHTML = "";
+                    searchSuggestions.style.display = searchTerm ? "block" : "none";
+
+                    if (searchTerm) {
+                        const filteredUsers = usersList.filter(user => {
+                            const fullNameMatch = user.fullName?.toLowerCase().includes(searchTerm);
+                            const usernameMatch = user.username?.toLowerCase().includes(searchTerm);
+                            return fullNameMatch || usernameMatch;
+                        });
+
+                        filteredUsers.forEach(user => {
+                            const suggestion = document.createElement("div");
+                            suggestion.className = "search-suggestion";
+                            suggestion.textContent = user.fullName || user.username || "Unknown";
+                            suggestion.onclick = () => {
+                                searchInput.value = suggestion.textContent;
+                                searchSuggestions.style.display = "none";
+                                const selectedUser = usersList.find(u => (u.fullName || u.username) === suggestion.textContent);
+                                if (selectedUser) {
+                                    const contactDiv = chatList.querySelector(`[data-user-id="${selectedUser.id}"]`);
+                                    if (contactDiv) selectUser(selectedUser, contactDiv);
+                                }
+                            };
+                            searchSuggestions.appendChild(suggestion);
+                        });
+                    }
                 });
-            } else {
-                console.warn("Search input element not found. Search functionality will not be active.");
+
+                document.addEventListener("click", (e) => {
+                    if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
+                        searchSuggestions.style.display = "none";
+                    }
+                });
             }
         }
 
-        // Toggle dropdown menu visibility
         function toggleDropdown() {
-            const dropdown = document.getElementById("chatDropdown");
-            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+            chatDropdown.style.display = chatDropdown.style.display === "block" ? "none" : "block";
         }
 
-        // Close dropdown when clicking outside
         document.addEventListener("click", (e) => {
-            const dropdown = document.getElementById("chatDropdown");
-            const headerInfo = document.querySelector(".chat-header-info");
-            if (dropdown && headerInfo && !headerInfo.contains(e.target) && !dropdown.contains(e.target)) {
-                dropdown.style.display = "none";
+            if (!headerInfo.contains(e.target) && !chatDropdown.contains(e.target)) {
+                chatDropdown.style.display = "none";
             }
         });
 
-        // View user's profile
         function viewProfile() {
             if (!selectedUser || !selectedUser.username) {
                 alert("User information is not available. Please try again.");
                 return;
             }
             const role = selectedUser.role || "non-coder";
-            // IMPORTANT: Updated to relative paths
-            const profilePage = role === "coder" ? "https://sunny1451.github.io/echo/codersprofile.html";
+            const profilePage = role === "coder" ? "../role/profile/codersprofile.html" : "../noncoders.html/noncoders.html";
             window.location.href = `${profilePage}?username=${encodeURIComponent(selectedUser.username)}`;
         }
 
-        // Block a user
         async function blockUser() {
             if (!selectedUser) return;
-            // Replaced confirm with a custom dialog if possible in your setup, otherwise alert.
-            // Keeping alert for now as per instructions.
             if (!confirm(`Are you sure you want to block ${selectedUser.fullName || selectedUser.username || "this user"}? They will not be able to send you messages.`)) return;
             try {
-                // Add user to blocked list
                 blockedUsers.push(selectedUser.id);
-                await updateDoc(doc(db, "users", currentUser.uid), {
-                    blockedUsers: blockedUsers
-                });
-                // Re-render chat main area for blocked status
+                await updateDoc(doc(db, "users", currentUser.uid), { blockedUsers: blockedUsers });
                 selectUser(selectedUser, document.querySelector(`.chat-contact[data-user-id="${selectedUser.id}"]`));
-                // Reload sidebar to reflect "Chat unavailable"
                 await loadUsers(searchInput.value.trim());
             } catch (error) {
                 console.error("Error blocking user:", error);
@@ -809,21 +831,13 @@
             }
         }
 
-        // Unblock a user
         async function unblockUser() {
             if (!selectedUser) return;
-            // Replaced confirm with a custom dialog if possible in your setup, otherwise alert.
-            // Keeping alert for now as per instructions.
             if (!confirm(`Are you sure you want to unblock ${selectedUser.fullName || selectedUser.username || "this user"}?`)) return;
             try {
-                // Remove user from blocked list
                 blockedUsers = blockedUsers.filter(id => id !== selectedUser.id);
-                await updateDoc(doc(db, "users", currentUser.uid), {
-                    blockedUsers: blockedUsers
-                });
-                // Re-render chat main area for unblocked status
-                selectUser(selectedUser, document.querySelector(`.chat-contact[data-user-id="${selectedUser.id}"]`));
-                // Reload sidebar to show chat is available again
+                await updateDoc(doc(db, "users", currentUser.uid), { blockedUsers: blockedUsers });
+                selectUser(selectedUser, document.querySelector(`[data-user-id="${selectedUser.id}"]`));
                 await loadUsers(searchInput.value.trim());
             } catch (error) {
                 console.error("Error unblocking user:", error);
@@ -831,23 +845,16 @@
             }
         }
 
-        // Delete chat messages
         async function deleteChat() {
             if (!selectedUser) return;
-            // Replaced confirm with a custom dialog if possible in your setup, otherwise alert.
-            // Keeping alert for now as per instructions.
             if (!confirm("Are you sure you want to delete this chat? This action cannot be undone and only deletes your copy of the messages.")) return;
             const chatId = [currentUser.uid, selectedUser.id].sort().join("_");
             try {
                 const messagesQuery = query(collection(db, "chats", chatId, "messages"));
                 const messagesSnapshot = await getDocs(messagesQuery);
-                // Use batched writes for efficiency if many messages
                 const batch = messagesSnapshot.docs.map(doc => deleteDoc(doc.ref));
-                await Promise.all(batch); // Execute all delete operations
-                
-                // After deleting messages, re-render the chat area to show it's empty
-                selectUser(selectedUser, document.querySelector(`.chat-contact[data-user-id="${selectedUser.id}"]`));
-                // Update last message in sidebar
+                await Promise.all(batch);
+                selectUser(selectedUser, document.querySelector(`[data-user-id="${selectedUser.id}"]`));
                 await updateLastMessage(selectedUser.id, "Chat cleared.");
             } catch (error) {
                 console.error("Error deleting chat:", error);
@@ -855,153 +862,77 @@
             }
         }
 
-        // Select a user to chat with and render their chat
+        function selectChat() {
+            if (selectedUser) {
+                const contactDiv = document.querySelector(`.chat-contact[data-user-id="${selectedUser.id}"]`);
+                if (contactDiv) selectUser(selectedUser, contactDiv);
+            }
+        }
+
         function selectUser(user, contactDiv) {
             selectedUser = user;
-            // Highlight selected contact in sidebar
             document.querySelectorAll(".chat-contact").forEach(div => div.classList.remove("active"));
             contactDiv.classList.add("active");
-            noChatMessage.style.display = "none"; // Hide initial "Select a user" message
+            noChatMessage.style.display = "none";
+            chatHeader.style.display = "flex";
+
+            chatHeaderAvatar.src = user.profile?.profilePicture || `https://placehold.co/50x50/e0e0e0/666666?text=${(user.fullName || user.username || "U")[0].toUpperCase()}`;
+            chatHeaderName.textContent = user.fullName || user.username || "Unknown";
+            messageCount.textContent = `(${getMessageCount(user.id)})`;
 
             const isBlocked = blockedUsers.includes(user.id);
+            blockUnblockBtn.textContent = isBlocked ? "Unblock" : "Block";
+            blockUnblockBtn.className = `dropdown-item ${isBlocked ? "" : "danger"}`;
 
-            // Create the chat header
-            const chatHeader = document.createElement("div");
-            chatHeader.className = "chat-header";
+            viewProfileBtn.onclick = viewProfile;
+            blockUnblockBtn.onclick = isBlocked ? unblockUser : blockUser;
+            deleteChatBtn.onclick = deleteChat;
+            headerInfo.onclick = toggleDropdown;
 
-            const headerInfo = document.createElement("div");
-            headerInfo.className = "chat-header-info";
-            headerInfo.innerHTML = `
-                ${user.profile?.profilePicture ?
-                    `<img src="${user.profile.profilePicture}" alt="Avatar" class="chat-header-avatar" onerror="this.onerror=null; this.src='https://placehold.co/50x50/e0e0e0/666666?text=${(user.fullName || user.username || "U")[0].toUpperCase()}';" />` :
-                    `<div class="chat-header-avatar-placeholder">${(user.fullName || user.username || "U")[0].toUpperCase()}</div>`}
-                <div class="chat-header-name">${user.fullName || user.username || "Unknown"}</div>
-            `;
-            headerInfo.addEventListener("click", toggleDropdown);
-            chatHeader.appendChild(headerInfo);
-
-            // Create the dropdown menu for chat options
-            const dropdownMenu = document.createElement("div");
-            dropdownMenu.className = "dropdown-menu";
-            dropdownMenu.id = "chatDropdown"; // Unique ID for dropdown
-
-            // View Profile option
-            const viewProfileItem = document.createElement("div");
-            viewProfileItem.className = "dropdown-item";
-            viewProfileItem.textContent = "View Profile";
-            viewProfileItem.addEventListener("click", viewProfile);
-            dropdownMenu.appendChild(viewProfileItem);
-
-            // Block/Unblock option
-            const blockUnblockItem = document.createElement("div");
-            blockUnblockItem.className = `dropdown-item ${isBlocked ? "" : "danger"}`; // "danger" class for block action
-            blockUnblockItem.textContent = isBlocked ? "Unblock" : "Block";
-            blockUnblockItem.addEventListener("click", isBlocked ? unblockUser : blockUser);
-            dropdownMenu.appendChild(blockUnblockItem);
-
-            // Delete Chat option
-            const deleteChatItem = document.createElement("div");
-            deleteChatItem.className = "dropdown-item danger"; // "danger" class for delete action
-            deleteChatItem.textContent = "Delete Chat";
-            deleteChatItem.addEventListener("click", deleteChat);
-            dropdownMenu.appendChild(deleteChatItem);
-
-            chatHeader.appendChild(dropdownMenu); // Add dropdown to header
-
-            // Create the main chat content area (messages or blocked message)
-            const chatContent = document.createElement("div");
-            if (isBlocked) {
-                chatContent.className = "blocked-message";
-                chatContent.innerHTML = `
-                    <p>You have blocked this user. You cannot send or receive messages.</p>
-                    <button class="unblock-btn">Unblock</button>
-                `;
-                const unblockBtn = chatContent.querySelector(".unblock-btn");
-                unblockBtn.addEventListener("click", unblockUser);
+            if (!isBlocked) {
+                loadChatMessages();
+                messageInput.value = "";
+                sendButton.disabled = !messageInput.value.trim();
             } else {
-                chatContent.innerHTML = `
-                    <div class="chat-messages" id="chatMessages"></div>
-                    <div class="chat-input">
-                        <textarea id="messageInput" placeholder="Type a message..."></textarea>
-                        <button class="send-btn" id="sendButton">Send</button>
+                chatMessages.innerHTML = `
+                    <div class="blocked-message">
+                        <p>You have blocked this user. You cannot send or receive messages.</p>
+                        <button class="unblock-btn" onclick="unblockUser()">Unblock</button>
                     </div>
                 `;
             }
 
-            // Update the chat main area with new header and content
-            chatMain.innerHTML = ""; // Clear previous chat content
-            chatMain.appendChild(chatHeader);
-            chatMain.appendChild(chatContent);
-
-            // Setup input and send button listeners if not blocked
-            if (!isBlocked) {
-                const messageInput = document.getElementById("messageInput");
-                const sendButton = document.getElementById("sendButton");
-
-                // Enable/disable send button based on input content
-                messageInput.addEventListener("input", () => {
-                    sendButton.disabled = !messageInput.value.trim();
-                });
-
-                // Send message on button click
-                sendButton.onclick = () => sendMessage();
-
-                // Send message on Enter key (Shift+Enter for new line)
-                messageInput.addEventListener("keypress", (e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault(); // Prevent new line
-                        sendMessage();
-                    }
-                });
-
-                loadChatMessages(); // Start listening for messages for the selected chat
-            }
-
-            // For mobile, hide sidebar after selecting a user
             if (window.innerWidth <= 480) {
                 sidebar.classList.remove('active');
             }
         }
 
-        // Send a message
         async function sendMessage() {
-            const messageInput = document.getElementById("messageInput");
-            const sendButton = document.getElementById("sendButton");
             const text = messageInput.value.trim();
+            if (!text || !selectedUser || blockedUsers.includes(selectedUser.id)) return;
 
-            // Basic validation
-            if (!text || !selectedUser || blockedUsers.includes(selectedUser.id)) {
-                sendButton.disabled = false; // Re-enable if invalid input
-                return;
-            }
-
-            sendButton.disabled = true; // Disable to prevent double-sending
-            const chatId = [currentUser.uid, selectedUser.id].sort().join("_"); // Unique chat ID for the pair
+            sendButton.disabled = true;
+            const chatId = [currentUser.uid, selectedUser.id].sort().join("_");
 
             try {
                 await addDoc(collection(db, "chats", chatId, "messages"), {
                     text,
                     senderId: currentUser.uid,
                     receiverId: selectedUser.id,
-                    timestamp: serverTimestamp() // Firestore timestamp
+                    timestamp: serverTimestamp()
                 });
-                messageInput.value = ""; // Clear input field
-                sendButton.disabled = false; // Re-enable button
-                
-                // Scroll to the bottom of the chat to show the new message
-                const chatMessages = document.getElementById("chatMessages");
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                messageInput.value = "";
+                sendButton.disabled = false;
 
-                // Update the last message displayed in the sidebar for the current contact
+                chatMessages.scrollTop = chatMessages.scrollHeight;
                 await updateLastMessage(selectedUser.id, `You: ${text.length > 30 ? text.substring(0, 27) + "..." : text}`);
             } catch (error) {
                 console.error("Error sending message:", error);
                 alert("Failed to send message: " + error.message);
-                sendButton.disabled = false; // Ensure button is re-enabled on error
+                sendButton.disabled = false;
             }
         }
 
-        // Update the last message snippet in the sidebar for a given user
         async function updateLastMessage(userId, message) {
             const contactDiv = chatList.querySelector(`[data-user-id="${userId}"]`);
             if (contactDiv) {
@@ -1010,21 +941,14 @@
             }
         }
 
-        // Load chat messages in real-time using onSnapshot listener
         function loadChatMessages() {
-            // Unsubscribe from previous listener if active to prevent memory leaks/duplicates
             if (unsubscribeChatListener) unsubscribeChatListener();
 
             const chatId = [currentUser.uid, selectedUser.id].sort().join("_");
-            const messagesQuery = query(
-                collection(db, "chats", chatId, "messages"),
-                orderBy("timestamp", "asc") // Order messages by timestamp
-            );
+            const messagesQuery = query(collection(db, "chats", chatId, "messages"), orderBy("timestamp", "asc"));
 
-            const chatMessages = document.getElementById("chatMessages");
-            // Set up real-time listener
             unsubscribeChatListener = onSnapshot(messagesQuery, (snapshot) => {
-                chatMessages.innerHTML = ""; // Clear existing messages before rendering new set
+                chatMessages.innerHTML = "";
                 snapshot.forEach(doc => {
                     const message = doc.data();
                     const messageDiv = document.createElement("div");
@@ -1038,7 +962,6 @@
                     `;
                     chatMessages.appendChild(messageDiv);
                 });
-                // Always scroll to the bottom when new messages arrive or on load
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, (error) => {
                 console.error("Error loading messages:", error);
@@ -1046,9 +969,19 @@
             });
         }
 
-        // Mobile sidebar toggle (add an icon in your header for this)
-        // You'll need to add a button in your navbar HTML for this to work on mobile.
-        // Example: <button id="sidebarToggle" class="mobile-toggle-btn"><i class="fas fa-bars"></i></button>
+        messageInput.addEventListener("input", () => {
+            sendButton.disabled = !messageInput.value.trim();
+        });
+
+        sendButton.addEventListener("click", sendMessage);
+
+        messageInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
         const sidebarToggle = document.getElementById('sidebarToggle');
         if (sidebarToggle) {
             sidebarToggle.addEventListener('click', () => {
@@ -1056,5 +989,3 @@
             });
         }
     </script>
-</body>
-</html>
