@@ -563,9 +563,9 @@
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="../../index.html" class="nav-logo">Echo</a>
+            <a href="https://sunny1451.github.io/echo/" class="nav-logo">Echo</a>
             <div class="nav-links">
-                <a href="../role/profile/search/search.html">
+                <a href="https://sunny1451.github.io/echo/search.html">
                     <img src="https://cdn-icons-png.flaticon.com/512/3917/3917132.png" alt="Search Icon" />
                     Search
                 </a>
@@ -577,19 +577,19 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/4508/4508440.png" alt="Settings Icon" />
                     Settings
                 </a>
-                <a href="../role/profile/codersprofile.html">
+                <a href="https://sunny1451.github.io/echo/codersprofile.html">
                     <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Profile Icon" />
                     Profile
                 </a>
-                <a href="message.html" class="active">
+                <a href="https://sunny1451.github.io/echo/message.html" class="active">
                     <img src="https://cdn-icons-png.flaticon.com/512/893/893257.png" alt="Chats Icon" />
                     Chats
                 </a>
-                <a href="reels.html">
+                <a href="https://sunny1451.github.io/echo/reels.html">
                     <img src="https://cdn-icons-png.flaticon.com/512/4379/4379560.png" alt="Reels Icon" />
                     Reels
                 </a>
-                <a href="portfolio.html">
+                <a href="https://sunny1451.github.io/echo/portfolio.html">
                     <img src="https://cdn-icons-png.flaticon.com/512/10493/10493865.png" alt="Portfolio Icon" />
                     Portfolio
                 </a>
@@ -680,7 +680,7 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
-                window.location.href = "../../index.html";
+                window.location.href = "https://sunny1451.github.io/echo/";
                 return;
             }
 
@@ -813,7 +813,7 @@
                 return;
             }
             const role = selectedUser.role || "non-coder";
-            const profilePage = role === "coder" ? "../role/profile/codersprofile.html" : "../noncoders.html/noncoders.html";
+            const profilePage = role === "coder" ? "https://sunny1451.github.io/echo/codersprofile.html" : "https://sunny1451.github.io/echo/codersprofile.html";
             window.location.href = `${profilePage}?username=${encodeURIComponent(selectedUser.username)}`;
         }
 
