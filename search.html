@@ -347,7 +347,7 @@
           `;
           suggestionItem.onclick = () => {
             console.log(`Navigating to profile: @${username}`);
-            window.location.href = `file:///C:/Users/sunny/OneDrive/Desktop/echo/login/role/profile/codersprofile.html?username=${encodeURIComponent(username)}`;
+            window.location.href = `https://sunny1451.github.io/echo/codersprofile.html?username=${encodeURIComponent(username)}`;
             suggestions.style.display = 'none';
             searchInput.value = '';
           };
@@ -371,7 +371,7 @@
     onAuthStateChanged(auth, (user) => {
       if (!user) {
         console.log('No user logged in, redirecting to login');
-        window.location.href = 'file:///C:/Users/sunny/OneDrive/Desktop/echo/login/login.html';
+        window.location.href = 'https://sunny1451.github.io/echo/';
         return;
       }
       loggedInUserUid = user.uid;
