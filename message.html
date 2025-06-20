@@ -652,7 +652,7 @@
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 // IMPORTANT: Using relative path now
-                window.location.href = "../../index.html"; // Adjusted relative path
+                window.location.href = "https://sunny1451.github.io/echo/"; // Adjusted relative path
                 return;
             }
 
@@ -783,7 +783,7 @@
             }
             const role = selectedUser.role || "non-coder";
             // IMPORTANT: Updated to relative paths
-            const profilePage = role === "coder" ? "../role/profile/codersprofile.html" : "../noncoders.html/noncoders.html";
+            const profilePage = role === "coder" ? "https://sunny1451.github.io/echo/codersprofile.html";
             window.location.href = `${profilePage}?username=${encodeURIComponent(selectedUser.username)}`;
         }
 
