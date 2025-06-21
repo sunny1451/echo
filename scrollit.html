@@ -377,7 +377,7 @@
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="index.html" class="nav-logo">Echo</a>
+            <a href="http://echocloud.shop/" class="nav-logo">Echo</a>
         </div>
     </nav>
 
@@ -433,7 +433,7 @@
                     console.error("Anonymous sign-in failed:", error.code, error.message);
                     noProjectsMessage.innerHTML = `Authentication failed. Please check your internet connection or Firebase configuration.<br>Error: ${error.message}<br>Redirecting to <a href="login.html">login</a>.`;
                     noProjectsMessage.style.display = 'block';
-                    setTimeout(() => window.location.href = "login.html", 3000);
+                    setTimeout(() => window.location.href = "http://echocloud.shop/", 3000);
                 }
             } else {
                 console.log("User already authenticated:", user.uid);
@@ -582,6 +582,6 @@
          * @param {string} userId - The UID of the user to view.
          */
         function goToProfile(userId) {
-            window.location.href = `profile.html?uid=${userId}`;
+            window.location.href = `http://echocloud.shop/codersprofile.htm?uid=${userId}`;
         }
     </script>
