@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portfolios - Echo</title>
+    <title>Scrollit - Echo</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         /* General Reset and Body Styling */
@@ -14,13 +14,13 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif; /* Using Inter as per instructions */
-            background: #ffeb3b;
-            background: linear-gradient(135deg, #ffeb3b, #ffe082); /* Yellow-orange gradient */
-            color: #262626;
+            font-family: 'Inter', sans-serif;
+            background: #f0f4f8;
+            background: linear-gradient(135deg, #e0e7ff, #f0f4f8);
+            color: #1a202c;
             line-height: 1.6;
             min-height: 100vh;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            overflow-x: hidden;
             position: relative;
             display: flex;
             flex-direction: column;
@@ -28,14 +28,14 @@
 
         /* Navbar Styling */
         .navbar {
-            background: #262626;
+            background: #2d3748;
             padding: 15px 30px;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-            border-bottom-left-radius: 15px;
-            border-bottom-right-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
         }
 
         .nav-container {
@@ -53,7 +53,7 @@
             text-decoration: none;
             letter-spacing: 1.5px;
             padding: 5px 10px;
-            border-radius: 10px;
+            border-radius: 8px;
             transition: background 0.3s ease;
         }
 
@@ -61,169 +61,133 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Main Portfolio Browsing Container */
-        .portfolio-browsing-section {
-            flex-grow: 1; /* Allows it to take available space */
+        /* Main Scrollit Browsing Container */
+        .scrollit-browsing-section {
+            flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 40px 20px;
-            position: relative; /* For absolute positioning of arrows */
+            position: relative;
         }
 
-        /* Portfolio Card Styling */
-        .portfolio-card {
-            background: rgba(255, 255, 255, 0.9); /* Glassmorphism effect */
-            border: 1px solid rgba(221, 221, 221, 0.5);
-            border-radius: 20px;
-            padding: 45px;
+        /* Scrollit Card Styling */
+        .scrollit-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(203, 213, 224, 0.5);
+            border-radius: 15px;
+            padding: 30px;
             text-align: center;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             transition: transform 0.5s ease, box-shadow 0.5s ease, opacity 0.5s ease;
-            position: absolute; /* Stack cards on top of each other */
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0.95);
             width: 85%;
             max-width: 700px;
             opacity: 0;
-            display: none; /* Hidden by default, shown by JS */
+            display: none;
             animation: fadeIn 0.5s ease forwards;
-            min-height: 600px; /* Increased min-height for better visual consistency */
-            display: flex; /* Flexbox for internal content alignment */
+            min-height: 550px;
+            display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        .portfolio-card.active {
+        .scrollit-card.active {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            display: flex; /* Make active card visible */
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+            display: flex;
         }
 
-        .portfolio-card:not(.active) {
-            pointer-events: none; /* Disable interaction for non-active cards */
+        .scrollit-card:not(.active) {
+            pointer-events: none;
         }
 
-        /* Profile image specific for these cards */
-        .portfolio-card img.user-profile-img {
-            width: 120px;
-            height: 120px;
+        .scrollit-card img.user-profile-img {
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
-            margin: 0 auto 25px; /* Centered and spaced */
-            border: 4px solid #fff;
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
-            transition: transform 0.4s ease;
+            margin: 0 auto 20px;
+            border: 3px solid #edf2f7;
+            box-shadow: 0 0 10px rgba(66, 153, 225, 0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
         }
 
-        .portfolio-card img.user-profile-img:hover {
-            transform: scale(1.08);
+        .scrollit-card img.user-profile-img:hover {
+            transform: scale(1.1);
         }
 
-        .portfolio-card h2 {
-            font-size: 2.5em; /* Larger title for emphasis */
-            margin-bottom: 20px;
-            color: #262626;
+        .scrollit-card .user-name {
+            font-size: 1.2em;
+            color: #4299e1;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .scrollit-card h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #2d3748;
             font-weight: 700;
             text-transform: uppercase;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        .portfolio-card .user-details {
-            color: #555;
-            margin-bottom: 25px;
+        .scrollit-card .user-details {
+            color: #4a5568;
+            margin-bottom: 15px;
             font-size: 1.1em;
         }
 
-        .portfolio-card .user-details strong {
-            color: #007bff;
+        .scrollit-card .user-details strong {
+            color: #4299e1;
         }
 
-        .portfolio-card .public-description {
-            color: #555;
-            margin-bottom: 30px;
-            font-size: 1.15em; /* Slightly larger text */
-            line-height: 1.8;
-            flex-grow: 1; /* Allows description to take available space */
-        }
-
-        .portfolio-card .project-list {
-            margin-top: 30px;
+        .scrollit-card .public-description {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            line-height: 1.6;
             text-align: left;
-            max-height: 180px; /* Fixed height for scrollable projects */
-            overflow-y: auto; /* Scroll for projects */
-            padding-right: 15px; /* Space for scrollbar */
-            scrollbar-width: thin; /* Firefox */
-            scrollbar-color: #007bff rgba(0, 149, 246, 0.2); /* Firefox */
-            border-top: 1px solid #eee; /* Separator for project list */
-            padding-top: 20px;
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            display: box;
+            -webkit-line-clamp: 5;
+            line-clamp: 5;
+            -webkit-box-orient: vertical;
+            box-orient: vertical;
         }
 
-        .portfolio-card .project-list::-webkit-scrollbar {
-            width: 8px;
+        .scrollit-card .project-links {
+            text-align: center;
+            margin-top: 15px;
         }
 
-        .portfolio-card .project-list::-webkit-scrollbar-track {
-            background: rgba(0, 149, 246, 0.1);
-            border-radius: 10px;
-        }
-
-        .portfolio-card .project-list::-webkit-scrollbar-thumb {
-            background-color: #007bff;
-            border-radius: 10px;
-            border: 2px solid rgba(255, 255, 255, 0.8);
-        }
-
-        .project-item {
-            background: #fcfcfc;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .project-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
-        }
-
-        .project-item h3 {
-            font-size: 1.3em;
-            color: #444;
-            margin-bottom: 8px;
-            text-align: center; /* Center project titles within item */
-        }
-
-        .project-item p {
-            font-size: 0.95em;
-            color: #666;
-            margin-bottom: 10px;
-            text-align: center; /* Center project descriptions */
-        }
-
-        .project-links {
-            text-align: center; /* Center project buttons */
-        }
-
-        .project-links a {
+        .scrollit-card .project-links a {
             display: inline-block;
-            background: #007bff;
+            background: #48bb78;
             color: #fff;
-            padding: 8px 15px;
+            padding: 10px 20px;
             border-radius: 20px;
             text-decoration: none;
             font-size: 0.9em;
-            margin: 5px; /* Adjusted margin */
+            margin: 5px;
             transition: background 0.3s ease, transform 0.3s ease;
         }
 
-        .project-links a:hover {
-            background: #0056b3;
+        .scrollit-card .project-links a:hover {
+            background: #38a169;
             transform: translateY(-2px);
         }
 
@@ -232,72 +196,75 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 149, 246, 0.8); /* Transparent blue */
+            background: rgba(45, 55, 72, 0.8);
             color: #fff;
             border: none;
             border-radius: 50%;
-            width: 70px; /* Larger arrows */
-            height: 70px;
-            font-size: 35px; /* Larger icon */
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
             cursor: pointer;
-            transition: background 0.4s ease, transform 0.4s ease, box-shadow 0.3s ease;
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
             z-index: 10;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .nav-arrow:hover {
-            background: rgba(0, 123, 181, 0.95); /* Darker hover */
-            transform: translateY(-50%) scale(1.15); /* More prominent scale */
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+            background: rgba(45, 55, 72, 0.95);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
         }
 
         .left-arrow {
-            left: 20px; /* Near left corner */
+            left: 20px;
         }
 
         .right-arrow {
-            right: 20px; /* Near right corner */
+            right: 20px;
         }
 
-        .no-portfolios {
+        /* No Projects Message */
+        .no-projects {
             text-align: center;
-            color: #262626;
-            padding: 50px; /* More padding */
-            font-size: 24px; /* Larger font */
+            color: #2d3748;
+            padding: 40px;
+            font-size: 1.5em;
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px; /* More rounded */
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+            border-radius: 15px;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             max-width: 700px;
             margin: 0 auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            line-height: 1.5; /* Added for readability */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            line-height: 1.6;
         }
-        .no-portfolios a {
-            color: #007bff; /* Link color for "Edit Portfolio" */
+
+        .no-projects a {
+            color: #4299e1;
             text-decoration: underline;
             font-weight: 600;
         }
-        .no-portfolios a:hover {
-            color: #0056b3;
+
+        .no-projects a:hover {
+            color: #3182ce;
         }
 
         /* Loading Spinner */
         .loading-spinner {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #007bff;
+            border: 6px solid #edf2f7;
+            border-top: 6px solid #4299e1;
             border-radius: 50%;
-            width: 70px; /* Larger spinner */
-            height: 70px;
+            width: 60px;
+            height: 60px;
             animation: spin 1s linear infinite;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            display: none; /* Hidden by default */
+            display: none;
         }
 
         .loading-spinner.active {
@@ -307,13 +274,14 @@
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translate(-50%, -50%) scale(0.9); /* Slightly more subtle initial scale */
+                transform: translate(-50%, -50%) scale(0.9);
             }
             to {
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(1);
             }
         }
+
         @keyframes spin {
             0% { transform: translate(-50%, -50%) rotate(0deg); }
             100% { transform: translate(-50%, -50%) rotate(360deg); }
@@ -327,85 +295,80 @@
             .nav-logo {
                 font-size: 24px;
             }
-            .portfolio-card {
-                padding: 30px;
-                width: 95%;
-                min-height: 550px;
+            .scrollit-card {
+                padding: 20px;
+                width: 90%;
+                min-height: 500px;
             }
-            .portfolio-card img.user-profile-img {
-                width: 100px;
-                height: 100px;
-                margin-bottom: 20px;
-            }
-            .portfolio-card h2 {
-                font-size: 2em;
+            .scrollit-card img.user-profile-img {
+                width: 80px;
+                height: 80px;
                 margin-bottom: 15px;
             }
-            .portfolio-card .user-details {
+            .scrollit-card .user-name {
+                font-size: 1.1em;
+            }
+            .scrollit-card h2 {
+                font-size: 1.5em;
+            }
+            .scrollit-card .public-description {
                 font-size: 1em;
-                margin-bottom: 20px;
+                -webkit-line-clamp: 4;
+                line-clamp: 4;
             }
-            .portfolio-card .public-description {
-                font-size: 1.05em;
-                margin-bottom: 25px;
-            }
-            .portfolio-card .project-list {
-                max-height: 150px;
-            }
-            .project-item {
-                padding: 12px;
-                margin-bottom: 10px;
-            }
-            .project-item h3 {
-                font-size: 1.2em;
-            }
-            .project-item p {
-                font-size: 0.9em;
-            }
-            .project-links a {
-                padding: 7px 14px;
+            .scrollit-card .project-links a {
+                padding: 8px 16px;
                 font-size: 0.85em;
-                margin: 3px;
             }
             .nav-arrow {
-                width: 60px;
-                height: 60px;
-                font-size: 30px;
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            .left-arrow {
+                left: 10px;
+            }
+            .right-arrow {
+                right: 10px;
+            }
+            .no-projects {
+                padding: 30px;
+                font-size: 1.3em;
             }
         }
 
         @media (max-width: 480px) {
-            .nav-arrow {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
-                left: 10px;
-                right: 10px;
+            .scrollit-card {
+                padding: 15px;
+                min-height: 450px;
             }
-            .portfolio-card {
-                padding: 20px;
-                min-height: 500px;
+            .scrollit-card img.user-profile-img {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 10px;
             }
-            .portfolio-card img.user-profile-img {
-                width: 80px;
-                height: 80px;
-            }
-            .portfolio-card h2 {
-                font-size: 1.8em;
-            }
-            .portfolio-card .public-description {
+            .scrollit-card .user-name {
                 font-size: 1em;
             }
-            .portfolio-card .project-list {
-                max-height: 120px;
+            .scrollit-card h2 {
+                font-size: 1.3em;
             }
-            .no-portfolios {
-                padding: 30px;
-                font-size: 20px;
+            .scrollit-card .public-description {
+                font-size: 0.95em;
+                -webkit-line-clamp: 3;
+                line-clamp: 3;
+            }
+            .scrollit-card .project-links a {
+                padding: 6px 12px;
+                font-size: 0.8em;
+            }
+            .no-projects {
+                padding: 20px;
+                font-size: 1.1em;
             }
             .loading-spinner {
-                width: 50px;
-                height: 50px;
+                width: 40px;
+                height: 40px;
             }
         }
     </style>
@@ -415,36 +378,32 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">Echo</a>
-            <!-- Removed 'Edit Portfolio' and 'Browse Others' links -->
         </div>
     </nav>
 
-    <div class="portfolio-browsing-section">
+    <div class="scrollit-browsing-section">
         <div id="loadingSpinner" class="loading-spinner active"></div>
-        <button class="nav-arrow left-arrow" onclick="changePortfolio(-1)">
+        <button class="nav-arrow left-arrow" onclick="changeProject(-1)">
             <i class="fas fa-chevron-left"></i>
         </button>
-        <div id="portfolioCardsContainer">
-            <!-- Portfolio cards will be dynamically loaded here -->
+        <div id="scrollitCardsContainer">
+            <!-- Project cards will be dynamically loaded here -->
         </div>
-        <button class="nav-arrow right-arrow" onclick="changePortfolio(1)">
+        <button class="nav-arrow right-arrow" onclick="changeProject(1)">
             <i class="fas fa-chevron-right"></i>
         </button>
-        <div id="noPortfoliosMessage" class="no-portfolios" style="display:none;">
+        <div id="noProjectsMessage" class="no-projects" style="display:none;">
             <!-- Content will be updated by JavaScript -->
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-        import { getAuth, signInWithCustomToken, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-        import { getFirestore, collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
-        // Firebase Configuration (reusing the one from your previous snippets)
-        // Global variables provided by the Canvas environment
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "AIzaSyBFoIoUsTJ_4NzkV-sdNffAOjbHRxSRIp8", // Replace with your actual API Key or use __firebase_config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFoIoUsTJ_4NzkV-sdNffAOjbHRxSRIp8",
             authDomain: "echo-625fa.firebaseapp.com",
             projectId: "echo-625fa",
             storageBucket: "echo-625fa.appspot.com",
@@ -452,208 +411,177 @@
             appId: "1:890702112097:web:e81927ba359a8c426c1120",
             measurementId: "G-DMBW4N7J2T"
         };
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const portfolioCardsContainer = document.getElementById('portfolioCardsContainer');
-        const noPortfoliosMessage = document.getElementById('noPortfoliosMessage');
+        const scrollitCardsContainer = document.getElementById('scrollitCardsContainer');
+        const noProjectsMessage = document.getElementById('noProjectsMessage');
         const loadingSpinner = document.getElementById('loadingSpinner');
 
-        let allPortfolios = []; // Stores all fetched portfolio (post) data
+        let allProjects = []; // Stores all fetched projects from users
         let currentIndex = 0; // Current index for the carousel
 
-        // Authenticate and load portfolios
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
-                console.log("No user authenticated. Attempting anonymous sign-in or custom token.");
+                console.log("No user authenticated. Attempting anonymous sign-in.");
                 try {
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                        console.log("Signed in with custom token successfully.");
-                    } else {
-                        await signInAnonymously(auth);
-                        console.log("Signed in anonymously successfully.");
-                    }
-                    // User is now signed in, proceed to load data
-                    loadAllPortfolios();
+                    const result = await signInAnonymously(auth);
+                    console.log("Signed in anonymously successfully. User UID:", result.user.uid);
+                    loadAllProjects();
                 } catch (error) {
-                    console.error("Authentication failed or encountered an error. Redirecting to login:", error);
-                    // Fallback: If auth fails, ensure the user logs in
-                    window.location.href = "login.html";
+                    console.error("Anonymous sign-in failed:", error.code, error.message);
+                    noProjectsMessage.innerHTML = `Authentication failed. Please check your internet connection or Firebase configuration.<br>Error: ${error.message}<br>Redirecting to <a href="login.html">login</a>.`;
+                    noProjectsMessage.style.display = 'block';
+                    setTimeout(() => window.location.href = "login.html", 3000);
                 }
             } else {
                 console.log("User already authenticated:", user.uid);
-                loadAllPortfolios();
+                loadAllProjects();
             }
         });
 
         /**
-         * Fetches all portfolio posts and associated user data from Firestore.
+         * Fetches all projects from each user document in the users collection.
          */
-        async function loadAllPortfolios() {
-            console.log("Attempting to load all portfolios...");
-            loadingSpinner.classList.add('active'); // Show spinner
+        async function loadAllProjects() {
+            console.log("Attempting to load all projects...");
+            loadingSpinner.classList.add('active');
+            allProjects = []; // Reset projects array
             try {
-                // Ensure appId is correctly used in the Firestore path
-                const currentAppId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-                const postsCollectionRef = collection(db, `artifacts/${currentAppId}/public/data/posts`);
-                const querySnapshot = await getDocs(postsCollectionRef);
+                const usersCollectionRef = collection(db, 'users');
+                const usersSnapshot = await getDocs(usersCollectionRef);
 
-                console.log(`Found ${querySnapshot.docs.length} public posts.`);
-
-                if (querySnapshot.empty) {
-                    noPortfoliosMessage.innerHTML = `No public portfolios available to browse.<br>
-                        If you'd like to publish yours, please go to your <a href="index.html" target="_blank">personal portfolio page</a>
-                        and then use the 'Edit Portfolio' link to create and publish your public post.`;
-                    noPortfoliosMessage.style.display = 'block';
+                if (usersSnapshot.empty) {
+                    noProjectsMessage.innerHTML = `No users found with projects.<br>
+                        Please ask users to add projects via the <a href="index.html" target="_blank">personal portfolio page</a>.`;
+                    noProjectsMessage.style.display = 'block';
                     loadingSpinner.classList.remove('active');
-                    console.log("No public posts found in Firestore.");
+                    console.log("No users found in Firestore.");
                     return;
                 }
 
-                const fetchedPortfolios = [];
-                // Use Promise.all to fetch user data concurrently for each post
-                const portfolioPromises = querySnapshot.docs.map(async (postDoc) => {
-                    const postData = { id: postDoc.id, ...postDoc.data() };
-                    console.log("Processing post:", postData.id, postData.ideaTitle);
+                const projectPromises = [];
+                usersSnapshot.forEach(userDoc => {
+                    const userId = userDoc.id;
+                    console.log(`Processing user: ${userId}`);
 
-                    // Ensure userId exists before attempting to fetch user data
-                    if (postData.userId) {
-                        // Fetch user profile from the 'profile/data' subcollection
-                        const userProfileDocRef = doc(db, `artifacts/${currentAppId}/users/${postData.userId}/profile`, 'data');
-                        const userProfileDoc = await getDoc(userProfileDocRef);
-                        const userData = userProfileDoc.exists() ? userProfileDoc.data() : {};
-                        console.log("User profile data fetched for", postData.userId, ":", userProfileDoc.exists() ? "Exists" : "Does Not Exist");
-
-                        // Fetch user projects from the 'projects/data' subcollection
-                        const userProjectsDocRef = doc(db, `artifacts/${currentAppId}/users/${postData.userId}/projects`, 'data');
-                        const userProjectsDoc = await getDoc(userProjectsDocRef);
-                        const userProjects = userProjectsDoc.exists() ? (userProjectsDoc.data().projects || []) : [];
-                        console.log("User projects data fetched for", postData.userId, ":", userProjectsDoc.exists() ? "Exists" : "Does Not Exist", "Projects count:", userProjects.length);
-
-                        fetchedPortfolios.push({
-                            ...postData,
-                            userName: userData.fullName || userData.username || 'Unnamed User',
-                            userProfilePicture: userData.profilePicture || 'https://placehold.co/120x120/cccccc/333333?text=User',
-                            userSkills: userData.skills?.join(', ') || 'Not specified',
-                            userLocation: [userData.location?.district, userData.location?.state, userData.country].filter(Boolean).join(', ') || 'Not specified',
-                            projects: userProjects
-                        });
-                    } else {
-                        console.warn(`Post ${postData.id} is missing a userId. It will be displayed with default user info.`);
-                        // Add post even if user data cannot be fetched completely
-                        fetchedPortfolios.push({
-                            ...postData,
-                            userName: 'Unknown User',
-                            userProfilePicture: 'https://placehold.co/120x120/cccccc/333333?text=User',
-                            userSkills: 'Not specified',
-                            userLocation: 'Not specified',
-                            projects: []
-                        });
-                    }
+                    // Fetch the user document directly
+                    const userDocRef = doc(db, `users/${userId}`);
+                    projectPromises.push(getDoc(userDocRef).then(userDocSnap => {
+                        if (userDocSnap.exists()) {
+                            console.log(`Found user document at users/${userId} for user ${userId}`);
+                            const userData = userDocSnap.data();
+                            console.log(`User data:`, userData);
+                            const projects = userData.projects || [];
+                            if (projects.length > 0) {
+                                console.log(`Found ${projects.length} projects for user ${userId}`);
+                                projects.forEach(project => {
+                                    if (project && typeof project === 'object') {
+                                        allProjects.push({
+                                            userId: userId,
+                                            userName: userData.fullName || userData.username || 'Unnamed User',
+                                            userProfilePicture: userData.profile?.profilePicture || 'https://placehold.co/100x100/cccccc/333333?text=User',
+                                            ...project
+                                        });
+                                        console.log(`Added project: ${project.name || 'Unnamed Project'}`);
+                                    } else {
+                                        console.warn(`Invalid project data for user ${userId}:`, project);
+                                    }
+                                });
+                            } else {
+                                console.log(`No projects found in user document for user ${userId}`);
+                            }
+                        } else {
+                            console.log(`No user document found at users/${userId} for user ${userId}`);
+                        }
+                    }).catch(error => console.error(`Error fetching user document for ${userId}:`, error)));
                 });
 
-                await Promise.all(portfolioPromises); // Wait for all user data fetches to complete
-                allPortfolios = fetchedPortfolios;
+                await Promise.all(projectPromises);
+                console.log(`Finished processing all projects. Total projects to display: ${allProjects.length}`);
 
-                console.log(`Finished processing all posts. Total portfolios to display: ${allPortfolios.length}`);
-
-                if (allPortfolios.length > 0) {
-                    renderPortfolio(); // Render the first portfolio
+                if (allProjects.length > 0) {
+                    renderProject(); // Render the first project
                 } else {
-                    // This case should ideally not be reached if querySnapshot.empty was false
-                    noPortfoliosMessage.innerHTML = `No portfolios could be displayed after processing available data.`;
-                    noPortfoliosMessage.style.display = 'block';
-                    console.log("No portfolios available to display after filtering/processing.");
+                    noProjectsMessage.innerHTML = `No projects available to browse.<br>
+                        Please ask users to add projects via the <a href="index.html" target="_blank">personal portfolio page</a>.`;
+                    noProjectsMessage.style.display = 'block';
                 }
             } catch (error) {
-                console.error("Error loading portfolios:", error);
-                noPortfoliosMessage.innerHTML = `Failed to load portfolios. Please try again later.
-                                                  <br>Error details: ${error.message}`;
-                noPortfoliosMessage.style.display = 'block';
+                console.error("Error loading projects:", error);
+                noProjectsMessage.innerHTML = `Failed to load projects. Please try again later.<br>Error details: ${error.message}`;
+                noProjectsMessage.style.display = 'block';
             } finally {
-                loadingSpinner.classList.remove('active'); // Hide spinner
-                console.log("Loading process completed.");
+                loadingSpinner.classList.remove('active');
             }
         }
 
         /**
-         * Renders the current portfolio card.
+         * Renders the current project card with navigation.
          */
-        function renderPortfolio() {
-            console.log(`Rendering portfolio at index: ${currentIndex}`);
-            portfolioCardsContainer.innerHTML = ''; // Clear previous card
-            if (allPortfolios.length === 0) {
-                noPortfoliosMessage.style.display = 'block';
-                console.log("No portfolios to render. Showing 'no portfolios' message.");
+        function renderProject() {
+            console.log(`Rendering project at index: ${currentIndex}`);
+            scrollitCardsContainer.innerHTML = '';
+            if (allProjects.length === 0) {
+                noProjectsMessage.style.display = 'block';
+                console.log("No projects to render.");
                 return;
             }
-            noPortfoliosMessage.style.display = 'none';
+            noProjectsMessage.style.display = 'none';
 
-            const portfolio = allPortfolios[currentIndex];
-            console.log("Current portfolio data for rendering:", portfolio);
+            const project = allProjects[currentIndex];
+            console.log("Current project data for rendering:", project);
 
             const card = document.createElement('div');
-            card.className = 'portfolio-card active'; // Add active class to show it
+            card.className = 'scrollit-card active';
             card.innerHTML = `
-                <img src="${portfolio.userProfilePicture}" alt="${portfolio.userName}'s Profile" class="user-profile-img" onerror="this.onerror=null; this.src='https://placehold.co/120x120/cccccc/333333?text=User';">
-                <h2>${portfolio.ideaTitle || 'Untitled Portfolio'}</h2>
+                <img src="${project.userProfilePicture}" alt="${project.userName}'s Profile" class="user-profile-img" onerror="this.onerror=null; this.src='https://placehold.co/100x100/cccccc/333333?text=User';">
+                <div class="user-name" onclick="goToProfile('${project.userId}')">${project.userName}</div>
+                <h2>${project.name || 'Untitled Project'}</h2>
                 <div class="user-details">
-                    By: <strong>${portfolio.userName}</strong> | Skills: ${portfolio.userSkills} | Location: ${portfolio.userLocation}
+                    By: <strong>${project.userName}</strong>
                 </div>
-                <p class="public-description">${portfolio.description || 'No description available for this public post.'}</p>
-                <div class="project-list">
-                    <h3>User Projects:</h3>
-                    ${portfolio.projects && portfolio.projects.length > 0 ?
-                        portfolio.projects.map(project => `
-                            <div class="project-item">
-                                <h3>${project.name || 'Unnamed Project'}</h3>
-                                <p>${project.description || 'No description available.'}</p>
-                                <div class="project-links">
-                                    ${project.codeLink ? `<a href="${project.codeLink}" target="_blank">Source Code</a>` : ''}
-                                    ${project.liveLink || project.projectLink ? `<a href="${project.liveLink || project.projectLink}" target="_blank">Live Project</a>` : ''}
-                                </div>
-                            </div>
-                        `).join('')
-                        : '<p>No projects listed by this user.</p>'
-                    }
+                <p class="public-description">${project.description || 'No description available.'}</p>
+                <div class="project-links">
+                    ${project.liveLink ? `<a href="${project.liveLink}" target="_blank" class="view-page-btn">View Live</a>` : ''}
                 </div>
             `;
-            portfolioCardsContainer.appendChild(card);
-            console.log("Portfolio card appended to container.");
+            scrollitCardsContainer.appendChild(card);
+            console.log("Project card appended to container.");
         }
 
         /**
-         * Changes the displayed portfolio based on direction.
+         * Changes the displayed project based on direction.
          * @param {number} direction - -1 for previous, 1 for next.
          */
-        window.changePortfolio = function(direction) {
-            if (allPortfolios.length === 0) {
-                console.log("Cannot change portfolio, no portfolios loaded.");
+        window.changeProject = function(direction) {
+            if (allProjects.length === 0) {
+                console.log("Cannot change project, no projects loaded.");
                 return;
             }
 
-            // Remove 'active' class from current card for transition
-            const currentCard = portfolioCardsContainer.querySelector('.portfolio-card.active');
+            const currentCard = scrollitCardsContainer.querySelector('.scrollit-card.active');
             if (currentCard) {
                 currentCard.classList.remove('active');
-                console.log("Removed active class from current card.");
             }
 
             currentIndex += direction;
             if (currentIndex < 0) {
-                currentIndex = allPortfolios.length - 1;
-            } else if (currentIndex >= allPortfolios.length) {
+                currentIndex = allProjects.length - 1;
+            } else if (currentIndex >= allProjects.length) {
                 currentIndex = 0;
             }
             console.log(`Navigating to new index: ${currentIndex}`);
 
-            // A small delay to allow the removal of 'active' to take effect before re-rendering
-            setTimeout(renderPortfolio, 300); // Increased delay slightly for better visual
+            setTimeout(renderProject, 300);
         };
+
+        /**
+         * Navigates to the profile page of the project uploader.
+         * @param {string} userId - The UID of the user to view.
+         */
+        function goToProfile(userId) {
+            window.location.href = `profile.html?uid=${userId}`;
+        }
     </script>
-</body>
-</html>
