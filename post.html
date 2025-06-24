@@ -1,247 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Post - Echo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
     body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(to bottom right, #f0f2f5, #e6f0fa);
-      color: #333;
-      line-height: 1.6;
-      min-height: 100vh;
     }
-
-    .navbar {
-      background: #262626;
-      padding: 15px 30px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .nav-logo {
-      color: #fff;
-      font-size: 28px;
-      font-weight: 700;
-      text-decoration: none;
-      letter-spacing: 1.5px;
-    }
-
-    .nav-buttons {
-      display: flex;
-      gap: 20px;
-    }
-
-    .nav-buttons button {
-      background: none;
-      border: 2px solid #fff;
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 16px;
+    .nav-button {
       transition: all 0.3s ease;
-      font-weight: 500;
     }
-
-    .nav-buttons button:hover {
-      background: #fff;
-      color: #262626;
+    .nav-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
-
-    .post-container {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 0 30px;
-      display: flex;
-      gap: 30px;
+    .post-section {
+      animation: fadeIn 0.5s ease-in-out;
     }
-
-    .image-section {
-      flex: 1;
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 25px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      transition: transform 0.3s ease;
-      position: relative;
-      min-height: 300px; /* Ensure frame height for centering */
-    }
-
-    .image-section:hover {
-      transform: translateY(-5px);
-    }
-
-    .image-section img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-      margin-top: 15px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .image-upload-icon {
-      width: 100px;
-      height: 100px;
-      background: url('https://cdn-icons-png.flaticon.com/512/5394/5394326.png') no-repeat center;
-      background-size: contain;
-      cursor: pointer;
-      margin: 50px auto 0; /* Center vertically in the frame */
-    }
-
-    .remove-image {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 20px;
-      height: 20px;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg>') no-repeat center;
-      background-size: contain;
-      cursor: pointer;
-      display: none;
-    }
-
-    .image-section:hover .remove-image {
-      display: block;
-    }
-
-    .image-section img + .remove-image {
-      display: block;
-    }
-
-    .details-section {
-      flex: 2;
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 25px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      transition: transform 0.3s ease;
-    }
-
-    .details-section:hover {
-      transform: translateY(-5px);
-    }
-
-    .details-section h2 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: #262626;
-      border-bottom: 2px solid #ddd;
-      padding-bottom: 10px;
-    }
-
-    .details-section label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #555;
-    }
-
-    .details-section input,
-    .details-section textarea {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 20px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 16px;
-      transition: border-color 0.3s ease;
-    }
-
-    .details-section input:focus,
-    .details-section textarea:focus {
-      border-color: #0095f6;
-      outline: none;
-      box-shadow: 0 0 5px rgba(0, 149, 246, 0.3);
-    }
-
-    .details-section textarea {
-      height: 150px;
-      resize: vertical;
-    }
-
-    .post-button {
-      background: #0095f6;
-      color: #fff;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 500;
-      transition: background 0.3s ease;
-    }
-
-    .post-button:hover {
-      background: #007bb5;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
-<body>
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="index.html" class="nav-logo">Echo</a>
-      <div class="nav-buttons">
-        <button onclick="window.location.href='posthistory.html'">Post History</button>
-        <button onclick="window.location.href='comments.html'">Comments</button>
-        <button onclick="window.location.href='likes.html'">Likes</button>
+<body class="min-h-screen font-sans text-gray-800">
+  <nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <a href="index.html" class="text-2xl font-bold tracking-wide">Echo</a>
+      <div class="flex space-x-4">
+        <button onclick="window.location.href='posthistory.html'" class="nav-button bg-transparent border-2 border-white text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-white hover:text-gray-900">Post History</button>
+        <button onclick="window.location.href='comments.html'" class="nav-button bg-transparent border-2 border-white text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-white hover:text-gray-900">Comments</button>
+        <button onclick="window.location.href='likes.html'" class="nav-button bg-transparent border-2 border-white text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-white hover:text-gray-900">Likes</button>
       </div>
-    </nav>
-
-  <div class="post-container">
-    <div class="image-section">
-      <h2>Upload Project Image</h2>
-      <div class="remove-image" onclick="removeImage()"></div>
-      <input type="file" id="postImage" accept="image/*" style="display: none;" />
-      <div class="image-upload-icon" onclick="document.getElementById('postImage').click()"></div>
-      <img id="previewImage" src="https://via.placeholder.com/300x400" alt="Preview" style="display: none;" />
     </div>
-    <div class="details-section">
-      <h2>Project Details</h2>
-      <label for="ideaTitle">Idea Title</label>
-      <input type="text" id="ideaTitle" placeholder="Enter idea title" />
+  </nav>
 
-      <label for="problemSolving">Problem it's solving</label>
-      <input type="text" id="problemSolving" placeholder="Describe the problem" />
-
-      <label for="targetUsers">Target Users</label>
-      <input type="text" id="targetUsers" placeholder="Who will use this?" />
-
-      <label for="description">Description</label>
-      <textarea id="description" placeholder="Add project details"></textarea>
-
-      <button class="post-button" onclick="postIdea()">Post</button>
-    </div>
-  </div>
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <section class="post-section bg-white rounded-2xl shadow-xl p-8">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-6 border-b-2 border-gray-200 pb-2">Project Details</h2>
+      <div class="space-y-6">
+        <div>
+          <label for="ideaTitle" class="block text-sm font-medium text-gray-700">Idea Title</label>
+          <input type="text" id="ideaTitle" placeholder="nothing" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200">
+        </div>
+        <div>
+          <label for="problemSolving" class="block text-sm font-medium text-gray-700">Problem it's solving</label>
+          <input type="text" id="problemSolving" placeholder="nothing" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200">
+        </div>
+        <div>
+          <label for="targetUsers" class="block text-sm font-medium text-gray-700">Target Users</label>
+          <input type="text" id="targetUsers" placeholder="everyone" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200">
+        </div>
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+          <textarea id="description" placeholder="Add project details" rows="5" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200 resize-vertical"></textarea>
+        </div>
+        <button id="postButton" class="bg-blue-600 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">Post</button>
+      </div>
+    </section>
+  </main>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-    import { getFirestore, collection, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
-    import { Upload } from "https://cdn.jsdelivr.net/npm/@imagekitio/js-sdk@latest/dist/imagekit.esm.min.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-firestore.js";
+
+    console.log("Script loaded");
 
     const firebaseConfig = {
       apiKey: "AIzaSyBFoIoUsTJ_4NzkV-sdNffAOjbHRxSRIp8",
@@ -253,128 +79,90 @@
       measurementId: "G-DMBW4N7J2T"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    try {
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+      console.log("Firebase initialized");
 
-    const IMAGEKIT_PUBLIC_KEY = 'public_kVKXQSuwDPXHQEV2SP1zrkVDgAM=';
-    const IMAGEKIT_URL_ENDPOINT = 'https://ik.imagekit.io/RentaLRoomS/';
-    const UPLOAD_PRESET = 'client_upload_preset'; // Replace with your upload preset name
+      const postButton = document.getElementById('postButton');
+      let currentUser = null;
 
-    // Initialize ImageKit with upload preset
-    const imagekit = new Upload({
-      publicKey: IMAGEKIT_PUBLIC_KEY,
-      urlEndpoint: IMAGEKIT_URL_ENDPOINT,
-    });
-
-    const postImage = document.getElementById('postImage');
-    const previewImage = document.getElementById('previewImage');
-    let currentUser = null;
-
-    // Preview image
-    postImage.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          previewImage.src = event.target.result;
-          previewImage.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // Remove image
-    window.removeImage = function() {
-      previewImage.style.display = 'none';
-      previewImage.src = 'https://via.placeholder.com/300x400';
-      postImage.value = ''; // Clear file input
-    };
-
-    // Upload image to ImageKit
-    async function uploadToImageKit(file) {
-      try {
-        const response = await imagekit.upload({
-          file: file,
-          fileName: `post_${Date.now()}_${file.name}`,
-          useUniqueFileName: true,
-          tags: ['post_image'],
-          uploadPreset: UPLOAD_PRESET, // Use the upload preset
+      if (!postButton) {
+        console.error("Post button not found");
+      } else {
+        console.log("Post button found");
+        postButton.addEventListener('click', async () => {
+          console.log("Post button clicked");
+          await postIdea();
         });
-        console.log('ImageKit upload response:', response);
-        return response.url;
-      } catch (error) {
-        console.error('ImageKit upload error:', error);
-        alert('Image upload failed. Check console for details.');
-        return '';
-      }
-    }
-
-    // Post idea to Firestore and redirect
-    window.postIdea = async function() { // Ensure global scope
-      if (!currentUser) {
-        alert("Please log in to post an idea.");
-        return;
       }
 
-      const ideaTitle = document.getElementById('ideaTitle').value.trim();
-      const problemSolving = document.getElementById('problemSolving').value.trim();
-      const targetUsers = document.getElementById('targetUsers').value.trim();
-      const description = document.getElementById('description').value.trim();
-      let imageUrl = previewImage.src === 'https://via.placeholder.com/300x400' ? '' : previewImage.src;
-
-      // Allow posting with at least one detail or image
-      if (!ideaTitle && !problemSolving && !targetUsers && !description && !imageUrl) {
-        alert("Please provide at least one detail or an image.");
-        return;
-      }
-
-      try {
-        let finalImageUrl = imageUrl;
-        if (postImage.files[0]) {
-          finalImageUrl = await uploadToImageKit(postImage.files[0]); // Upload to ImageKit
-          if (!finalImageUrl) {
-            alert("Image upload failed, proceeding without image.");
-          }
+      async function postIdea() {
+        console.log("postIdea called");
+        if (!currentUser) {
+          console.log("No user logged in");
+          alert("Please log in to post an idea.");
+          window.location.href = "login.html";
+          return;
         }
 
-        const postData = {
-          userId: currentUser.uid,
-          ideaTitle,
-          problemSolving,
-          targetUsers,
-          description,
-          imageUrl: finalImageUrl,
-          timestamp: new Date().toISOString(),
-        };
+        const ideaTitle = document.getElementById('ideaTitle').value.trim();
+        const problemSolving = document.getElementById('problemSolving').value.trim();
+        const targetUsers = document.getElementById('targetUsers').value.trim();
+        const description = document.getElementById('description').value.trim();
 
-        // Save to posts collection
-        const postsRef = collection(db, "posts");
-        const docRef = await addDoc(postsRef, postData);
-        console.log("Post saved with ID: ", docRef.id);
+        console.log("Form data:", { ideaTitle, problemSolving, targetUsers, description });
 
-        // Optionally update users collection with post reference
-        const userRef = doc(db, "users", currentUser.uid);
-        await updateDoc(userRef, {
-          posts: [docRef.id, ...(currentUser.posts || [])]
-        });
+        if (!ideaTitle && !problemSolving && !targetUsers && !description) {
+          console.log("No data provided");
+          alert("Please provide at least one detail.");
+          return;
+        }
 
-        alert("Post submitted successfully!");
-        // Redirect to user's post history page
-        window.location.href = `posthistory.html?userId=${currentUser.uid}`;
-      } catch (error) {
-        console.error("Error posting idea:", error);
-        alert("Failed to post idea. Please try again.");
+        try {
+          const postData = {
+            userId: currentUser.uid,
+            ideaTitle,
+            problemSolving,
+            targetUsers,
+            description,
+            timestamp: new Date().toISOString(),
+          };
+
+          console.log("Saving post:", postData);
+          const postsRef = collection(db, "posts");
+          const docRef = await addDoc(postsRef, postData);
+          console.log("Post saved, ID:", docRef.id);
+
+          const userRef = doc(db, "users", currentUser.uid);
+          await updateDoc(userRef, {
+            posts: arrayUnion(docRef.id)
+          });
+          console.log("User posts updated");
+
+          alert("Post submitted successfully!");
+          console.log("Redirecting to scrollit.html");
+          window.location.href = 'scrollit.html';
+        } catch (error) {
+          console.error("Error posting idea:", error);
+          alert(`Failed to post: ${error.message}`);
+        }
       }
-    };
 
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "login.html";
-        return;
-      }
-      currentUser = user;
-    });
+      onAuthStateChanged(auth, (user) => {
+        console.log("Auth state:", user ? "Logged in" : "No user");
+        if (!user) {
+          window.location.href = "login.html";
+          return;
+        }
+        currentUser = user;
+        console.log("User set:", currentUser.uid);
+      });
+    } catch (error) {
+      console.error("Initialization error:", error);
+      alert("Failed to initialize app.");
+    }
   </script>
 </body>
 </html>
