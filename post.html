@@ -242,7 +242,7 @@
         });
 
         alert("Post submitted successfully!");
-        window.location.href = 'scrollit.html';
+        window.location.href = 'https://echocloud.shop/scrollit.html';
       } catch (error) {
         alert(`Failed to post: ${error.message}`);
       }
@@ -250,7 +250,7 @@
 
     onAuthStateChanged(auth, (user) => {
       if (!user) {
-        window.location.href = "login.html";
+        window.location.href = "https://echocloud.shop/";
       } else {
         currentUser = user;
       }
