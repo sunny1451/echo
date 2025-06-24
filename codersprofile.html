@@ -1724,7 +1724,7 @@
 
   document.getElementById("shareProfileBtn").addEventListener("click", () => {
     const username = document.getElementById("fullName").dataset.username;
-    const profileLink = `https://echo.com/profile/${username}`;
+    const profileLink = `https://echocloud.shop/codersprofile.html?username=${username}`;
     navigator.clipboard.writeText(profileLink).then(() => {
       alert("Profile link copied to clipboard!");
     }).catch(err => {
