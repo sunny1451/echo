@@ -172,9 +172,13 @@
         .scrollit-card .project-links {
             text-align: center;
             margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
 
-        .scrollit-card .project-links a {
+        .scrollit-card .project-links a.view-page-btn {
             display: inline-block;
             background: #48bb78;
             color: #fff;
@@ -182,13 +186,149 @@
             border-radius: 20px;
             text-decoration: none;
             font-size: 0.9em;
-            margin: 5px;
             transition: background 0.3s ease, transform 0.3s ease;
         }
 
-        .scrollit-card .project-links a:hover {
+        .scrollit-card .project-links a.view-page-btn:hover {
             background: #38a169;
             transform: translateY(-2px);
+        }
+
+        .scrollit-card .project-links .like-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .scrollit-card .project-links .like-btn {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #4a5568;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .scrollit-card .project-links .like-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .scrollit-card .project-links .likes-count {
+            font-size: 0.9em;
+            color: #4a5568;
+        }
+
+        .scrollit-card .project-links .comment-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .scrollit-card .project-links .comment-btn {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #4a5568;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .scrollit-card .project-links .comment-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .scrollit-card .project-links .comments-count {
+            font-size: 0.9em;
+            color: #4a5568;
+        }
+
+        /* Comments Section (Black-and-White Theme) */
+        .comments-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            text-align: left;
+            display: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .comments-section.active {
+            display: block;
+        }
+
+        .comments-section .comment {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            font-size: 1em;
+            background: #f9f9f9;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .comments-section .comment:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .comments-section .comment .comment-user {
+            color: #000;
+            font-weight: 700;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            display: inline-block;
+            margin-bottom: 5px;
+            text-decoration: underline;
+        }
+
+        .comments-section .comment .comment-text {
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.5;
+        }
+
+        .comments-section .comment .comment-timestamp {
+            color: #666;
+            font-size: 0.85em;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .comments-section .comment-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .comments-section .comment-input input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+            font-size: 1em;
+            color: #000;
+            background: #f0f0f0;
+        }
+
+        .comments-section .comment-input button {
+            background: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+        }
+
+        .comments-section .comment-input button:hover {
+            opacity: 0.9;
         }
 
         /* Navigation Arrows */
@@ -316,9 +456,34 @@
                 -webkit-line-clamp: 4;
                 line-clamp: 4;
             }
-            .scrollit-card .project-links a {
+            .scrollit-card .project-links a.view-page-btn {
                 padding: 8px 16px;
                 font-size: 0.85em;
+            }
+            .scrollit-card .project-links .like-btn {
+                font-size: 1em;
+            }
+            .scrollit-card .project-links .likes-count {
+                font-size: 0.85em;
+            }
+            .scrollit-card .project-links .comment-btn {
+                font-size: 1em;
+            }
+            .scrollit-card .project-links .comments-count {
+                font-size: 0.85em;
+            }
+            .comments-section {
+                padding: 10px;
+            }
+            .comments-section .comment {
+                font-size: 0.9em;
+            }
+            .comments-section .comment-input input {
+                font-size: 0.9em;
+            }
+            .comments-section .comment-input button {
+                font-size: 0.9em;
+                padding: 6px 12px;
             }
             .nav-arrow {
                 width: 40px;
@@ -358,9 +523,34 @@
                 -webkit-line-clamp: 3;
                 line-clamp: 3;
             }
-            .scrollit-card .project-links a {
+            .scrollit-card .project-links a.view-page-btn {
                 padding: 6px 12px;
                 font-size: 0.8em;
+            }
+            .scrollit-card .project-links .like-btn {
+                font-size: 0.9em;
+            }
+            .scrollit-card .project-links .likes-count {
+                font-size: 0.8em;
+            }
+            .scrollit-card .project-links .comment-btn {
+                font-size: 0.9em;
+            }
+            .scrollit-card .project-links .comments-count {
+                font-size: 0.8em;
+            }
+            .comments-section {
+                padding: 8px;
+            }
+            .comments-section .comment {
+                font-size: 0.85em;
+            }
+            .comments-section .comment-input input {
+                font-size: 0.85em;
+            }
+            .comments-section .comment-input button {
+                font-size: 0.85em;
+                padding: 5px 10px;
             }
             .no-projects {
                 padding: 20px;
@@ -377,7 +567,7 @@
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="http://echocloud.shop/" class="nav-logo">Echo</a>
+            <a href="index.html" class="nav-logo">Echo</a>
         </div>
     </nav>
 
@@ -387,7 +577,7 @@
             <i class="fas fa-chevron-left"></i>
         </button>
         <div id="scrollitCardsContainer">
-            <!-- Project cards will be dynamically loaded here -->
+            <!-- Project and post cards will be dynamically loaded here -->
         </div>
         <button class="nav-arrow right-arrow" onclick="changeProject(1)">
             <i class="fas fa-chevron-right"></i>
@@ -400,7 +590,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, getDocs, collection, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBFoIoUsTJ_4NzkV-sdNffAOjbHRxSRIp8",
@@ -419,8 +609,9 @@
         const noProjectsMessage = document.getElementById('noProjectsMessage');
         const loadingSpinner = document.getElementById('loadingSpinner');
 
-        let allProjects = []; // Stores all fetched projects from users
+        let allProjects = []; // Stores all fetched projects and posts
         let currentIndex = 0; // Current index for the carousel
+        let currentUser = null; // Store current user
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
@@ -428,61 +619,60 @@
                 try {
                     const result = await signInAnonymously(auth);
                     console.log("Signed in anonymously successfully. User UID:", result.user.uid);
-                    loadAllProjects();
+                    currentUser = result.user;
+                    loadAllItems();
                 } catch (error) {
                     console.error("Anonymous sign-in failed:", error.code, error.message);
                     noProjectsMessage.innerHTML = `Authentication failed. Please check your internet connection or Firebase configuration.<br>Error: ${error.message}<br>Redirecting to <a href="login.html">login</a>.`;
                     noProjectsMessage.style.display = 'block';
-                    setTimeout(() => window.location.href = "http://echocloud.shop/", 3000);
+                    setTimeout(() => window.location.href = "login.html", 3000);
                 }
             } else {
                 console.log("User already authenticated:", user.uid);
-                loadAllProjects();
+                currentUser = user;
+                loadAllItems();
             }
         });
 
         /**
-         * Fetches all projects from each user document in the users collection.
+         * Fetches all projects from users collection and posts from posts collection.
          */
-        async function loadAllProjects() {
-            console.log("Attempting to load all projects...");
+        async function loadAllItems() {
+            console.log("Attempting to load all projects and posts...");
             loadingSpinner.classList.add('active');
-            allProjects = []; // Reset projects array
+            allProjects = []; // Reset array
+
             try {
+                // Fetch projects from users collection
                 const usersCollectionRef = collection(db, 'users');
                 const usersSnapshot = await getDocs(usersCollectionRef);
-
-                if (usersSnapshot.empty) {
-                    noProjectsMessage.innerHTML = `No users found with projects.<br>
-                        Please ask users to add projects via the <a href="index.html" target="_blank">personal portfolio page</a>.`;
-                    noProjectsMessage.style.display = 'block';
-                    loadingSpinner.classList.remove('active');
-                    console.log("No users found in Firestore.");
-                    return;
-                }
 
                 const projectPromises = [];
                 usersSnapshot.forEach(userDoc => {
                     const userId = userDoc.id;
                     console.log(`Processing user: ${userId}`);
 
-                    // Fetch the user document directly
                     const userDocRef = doc(db, `users/${userId}`);
                     projectPromises.push(getDoc(userDocRef).then(userDocSnap => {
                         if (userDocSnap.exists()) {
-                            console.log(`Found user document at users/${userId} for user ${userId}`);
+                            console.log(`Found user document at users/${userId}`);
                             const userData = userDocSnap.data();
                             console.log(`User data:`, userData);
                             const projects = userData.projects || [];
                             if (projects.length > 0) {
                                 console.log(`Found ${projects.length} projects for user ${userId}`);
-                                projects.forEach(project => {
+                                projects.forEach((project, index) => {
                                     if (project && typeof project === 'object') {
                                         allProjects.push({
+                                            type: 'project',
                                             userId: userId,
+                                            projectIndex: index,
                                             userName: userData.fullName || userData.username || 'Unnamed User',
                                             userProfilePicture: userData.profile?.profilePicture || 'https://placehold.co/100x100/cccccc/333333?text=User',
-                                            ...project
+                                            name: project.name,
+                                            description: project.description,
+                                            liveLink: project.liveLink,
+                                            likes: project.likes || []
                                         });
                                         console.log(`Added project: ${project.name || 'Unnamed Project'}`);
                                     } else {
@@ -490,27 +680,57 @@
                                     }
                                 });
                             } else {
-                                console.log(`No projects found in user document for user ${userId}`);
+                                console.log(`No projects found for user ${userId}`);
                             }
                         } else {
-                            console.log(`No user document found at users/${userId} for user ${userId}`);
+                            console.log(`No user document found at users/${userId}`);
                         }
                     }).catch(error => console.error(`Error fetching user document for ${userId}:`, error)));
                 });
 
-                await Promise.all(projectPromises);
-                console.log(`Finished processing all projects. Total projects to display: ${allProjects.length}`);
+                // Fetch posts from posts collection
+                const postsCollectionRef = collection(db, 'posts');
+                const postsSnapshot = await getDocs(postsCollectionRef);
+
+                const postPromises = [];
+                postsSnapshot.forEach(postDoc => {
+                    const postData = postDoc.data();
+                    console.log(`Processing post: ${postDoc.id}`);
+                    const userDocRef = doc(db, `users/${postData.userId}`);
+                    postPromises.push(getDoc(userDocRef).then(userDocSnap => {
+                        const userData = userDocSnap.exists() ? userDocSnap.data() : {};
+                        allProjects.push({
+                            type: 'post',
+                            id: postDoc.id,
+                            userId: postData.userId,
+                            userName: userData.fullName || userData.username || 'Unnamed User',
+                            userProfilePicture: userData.profile?.profilePicture || 'https://placehold.co/100x100/cccccc/333333?text=User',
+                            name: postData.ideaTitle || 'Untitled Post',
+                            description: postData.description || 'No description available.',
+                            problemSolving: postData.problemSolving,
+                            targetUsers: postData.targetUsers,
+                            timestamp: postData.timestamp,
+                            likes: postData.likes || [],
+                            comments: postData.comments || []
+                        });
+                        console.log(`Added post: ${postData.ideaTitle || 'Untitled Post'}`);
+                    }).catch(error => console.error(`Error fetching user document for post ${postDoc.id}:`, error)));
+                });
+
+                await Promise.all([...projectPromises, ...postPromises]);
+                console.log(`Finished processing all items. Total items to display: ${allProjects.length}`);
 
                 if (allProjects.length > 0) {
-                    renderProject(); // Render the first project
+                    currentIndex = Math.floor(Math.random() * allProjects.length); // Randomize starting index
+                    renderProject();
                 } else {
-                    noProjectsMessage.innerHTML = `No projects available to browse.<br>
-                        Please ask users to add projects via the <a href="index.html" target="_blank">personal portfolio page</a>.`;
+                    noProjectsMessage.innerHTML = `No projects or posts available to browse.<br>
+                        Please add projects via the <a href="index.html" target="_blank">personal portfolio page</a> or posts via the <a href="post.html">post page</a>.`;
                     noProjectsMessage.style.display = 'block';
                 }
             } catch (error) {
-                console.error("Error loading projects:", error);
-                noProjectsMessage.innerHTML = `Failed to load projects. Please try again later.<br>Error details: ${error.message}`;
+                console.error("Error loading projects and posts:", error);
+                noProjectsMessage.innerHTML = `Failed to load projects and posts. Please try again later.<br>Error details: ${error.message}`;
                 noProjectsMessage.style.display = 'block';
             } finally {
                 loadingSpinner.classList.remove('active');
@@ -518,46 +738,236 @@
         }
 
         /**
-         * Renders the current project card with navigation.
+         * Toggles like for a project or post.
+         * @param {string} type - 'project' or 'post'
+         * @param {string} userId - User ID for projects
+         * @param {number} projectIndex - Index of project in user's projects array
+         * @param {string} postId - ID of post document
          */
-        function renderProject() {
-            console.log(`Rendering project at index: ${currentIndex}`);
+        async function toggleLike(type, userId, projectIndex, postId) {
+            if (!currentUser) {
+                console.log("No user logged in for liking");
+                alert("Please log in to like.");
+                window.location.href = "login.html";
+                return;
+            }
+
+            try {
+                if (type === 'post') {
+                    const postDocRef = doc(db, `posts/${postId}`);
+                    const postDocSnap = await getDoc(postDocRef);
+                    if (postDocSnap.exists()) {
+                        const likes = postDocSnap.data().likes || [];
+                        const hasLiked = likes.includes(currentUser.uid);
+
+                        if (hasLiked) {
+                            await updateDoc(postDocRef, {
+                                likes: arrayRemove(currentUser.uid)
+                            });
+                        } else {
+                            await updateDoc(postDocRef, {
+                                likes: arrayUnion(currentUser.uid)
+                            });
+                        }
+                        console.log(`Updated post likes for post ${postId}`);
+                        const updatedPostSnap = await getDoc(postDocRef);
+                        allProjects[currentIndex].likes = updatedPostSnap.data().likes || [];
+                    } else {
+                        console.error(`Post not found for ID ${postId}`);
+                        alert("Post not found. Please try again later.");
+                        return;
+                    }
+                } else if (type === 'project') {
+                    const userDocRef = doc(db, `users/${userId}`);
+                    const userDocSnap = await getDoc(userDocRef);
+                    if (userDocSnap.exists()) {
+                        const userData = userDocSnap.data();
+                        const projects = userData.projects || [];
+                        if (projectIndex >= 0 && projectIndex < projects.length) {
+                            const project = projects[projectIndex];
+                            const likes = project.likes || [];
+                            const hasLiked = likes.includes(currentUser.uid);
+
+                            if (hasLiked) {
+                                project.likes = likes.filter(uid => uid !== currentUser.uid);
+                            } else {
+                                project.likes = [...likes, currentUser.uid];
+                            }
+                            await updateDoc(userDocRef, {
+                                projects: projects
+                            });
+                            console.log(`Updated project likes for user ${userId}, project index ${projectIndex}`);
+                            allProjects[currentIndex].likes = project.likes || [];
+                        } else {
+                            console.error(`Invalid project index ${projectIndex} for user ${userId}`);
+                            alert("Project not found. Please try again later.");
+                            return;
+                        }
+                    } else {
+                        console.error(`User not found for ID ${userId}`);
+                        alert("User not found. Please try again later.");
+                        return;
+                    }
+                }
+                renderProject();
+            } catch (error) {
+                console.error("Error toggling like:", error);
+                alert(`Failed to update like: ${error.message}`);
+            }
+        }
+
+        /**
+         * Toggles the visibility of the comments section for a post.
+         * @param {string} postId - ID of the post
+         */
+        function toggleComments(postId) {
+            const commentsSection = document.getElementById(`comments-section-${postId}`);
+            if (commentsSection) {
+                commentsSection.classList.toggle('active');
+            }
+        }
+
+        /**
+         * Adds a comment to a post.
+         * @param {string} postId - ID of the post
+         */
+        async function addComment(postId) {
+            if (!currentUser) {
+                console.log("No user logged in for commenting");
+                alert("Please log in to comment.");
+                window.location.href = "login.html";
+                return;
+            }
+
+            const commentInput = document.getElementById(`comment-input-${postId}`);
+            const commentText = commentInput.value.trim();
+            if (!commentText) {
+                alert("Comment cannot be empty.");
+                return;
+            }
+
+            try {
+                const postDocRef = doc(db, `posts/${postId}`);
+                const postDocSnap = await getDoc(postDocRef);
+                if (postDocSnap.exists()) {
+                    const newComment = {
+                        userId: currentUser.uid,
+                        text: commentText,
+                        timestamp: new Date().toISOString()
+                    };
+                    await updateDoc(postDocRef, {
+                        comments: arrayUnion(newComment)
+                    });
+                    console.log(`Added comment to post ${postId}`);
+                    allProjects[currentIndex].comments = [...(allProjects[currentIndex].comments || []), newComment];
+                    commentInput.value = '';
+                    renderProject();
+                } else {
+                    console.error(`Post not found for ID ${postId}`);
+                    alert("Post not found. Please try again later.");
+                }
+            } catch (error) {
+                console.error("Error adding comment:", error);
+                alert(`Failed to add comment: ${error.message}`);
+            }
+        }
+
+        // Make functions accessible for onclick
+        window.toggleLike = toggleLike;
+        window.toggleComments = toggleComments;
+        window.addComment = addComment;
+
+        /**
+         * Renders the current project or post card with navigation.
+         */
+        async function renderProject() {
+            console.log(`Rendering item at index: ${currentIndex}`);
             scrollitCardsContainer.innerHTML = '';
             if (allProjects.length === 0) {
                 noProjectsMessage.style.display = 'block';
-                console.log("No projects to render.");
+                console.log("No projects or posts to render.");
                 return;
             }
             noProjectsMessage.style.display = 'none';
 
-            const project = allProjects[currentIndex];
-            console.log("Current project data for rendering:", project);
+            const item = allProjects[currentIndex];
+            console.log("Current item data for rendering:", item);
+
+            const hasLiked = currentUser && item.likes && item.likes.includes(currentUser.uid);
+            const likesCount = item.likes ? item.likes.length : 0;
+            const commentsCount = item.comments ? item.comments.length : 0;
+
+            // Fetch commenter names for posts
+            let commentsHtml = '';
+            if (item.type === 'post' && item.comments && item.comments.length > 0) {
+                for (const comment of item.comments) {
+                    const userDocRef = doc(db, `users/${comment.userId}`);
+                    const userDocSnap = await getDoc(userDocRef);
+                    const userData = userDocSnap.exists() ? userDocSnap.data() : {};
+                    const commenterName = userData.fullName || userData.username || 'Unknown User';
+                    commentsHtml += `
+                        <div class="comment">
+                            <div class="comment-user" onclick="goToProfile('${comment.userId}')">${commenterName}</div>
+                            <div class="comment-text">${comment.text}</div>
+                            <div class="comment-timestamp">Posted: ${new Date(comment.timestamp).toLocaleString()}</div>
+                        </div>
+                    `;
+                }
+            }
 
             const card = document.createElement('div');
             card.className = 'scrollit-card active';
             card.innerHTML = `
-                <img src="${project.userProfilePicture}" alt="${project.userName}'s Profile" class="user-profile-img" onerror="this.onerror=null; this.src='https://placehold.co/100x100/cccccc/333333?text=User';">
-                <div class="user-name" onclick="goToProfile('${project.userId}')">${project.userName}</div>
-                <h2>${project.name || 'Untitled Project'}</h2>
+                <img src="${item.userProfilePicture}" alt="${item.userName}'s Profile" class="user-profile-img" onerror="this.onerror=null; this.src='https://placehold.co/100x100/cccccc/333333?text=User';">
+                <div class="user-name" onclick="goToProfile('${item.userId}')">${item.userName}</div>
+                <h2>${item.name || (item.type === 'post' ? 'Untitled Post' : 'Untitled Project')}</h2>
                 <div class="user-details">
-                    By: <strong>${project.userName}</strong>
+                    By: <strong>${item.userName}</strong>
+                    ${item.type === 'post' && item.problemSolving ? `<br>Problem Solving: <strong>${item.problemSolving}</strong>` : ''}
+                    ${item.type === 'post' && item.targetUsers ? `<br>Target Users: <strong>${item.targetUsers}</strong>` : ''}
+                    ${item.type === 'post' && item.timestamp ? `<br>Posted: <strong>${new Date(item.timestamp).toLocaleString()}</strong>` : ''}
                 </div>
-                <p class="public-description">${project.description || 'No description available.'}</p>
+                <p class="public-description">${item.description || 'No description available.'}</p>
                 <div class="project-links">
-                    ${project.liveLink ? `<a href="${project.liveLink}" target="_blank" class="view-page-btn">View Live</a>` : ''}
+                    ${item.liveLink ? `<a href="${item.liveLink}" target="_blank" class="view-page-btn">View Live</a>` : ''}
+                    <div class="like-container">
+                        <button class="like-btn" onclick="toggleLike('${item.type}', '${item.userId}', ${item.projectIndex || -1}, '${item.id || ''}')" title="${hasLiked ? 'Unlike' : 'Like'}">
+                            <i class="far fa-heart ${hasLiked ? 'fas' : ''}"></i>
+                        </button>
+                        <span class="likes-count">${likesCount} like${likesCount !== 1 ? 's' : ''}</span>
+                    </div>
+                    ${item.type === 'post' ? `
+                        <div class="comment-container">
+                            <button class="comment-btn" onclick="toggleComments('${item.id}')">
+                                <i class="far fa-comment"></i>
+                            </button>
+                            <span class="comments-count">${commentsCount} comment${commentsCount !== 1 ? 's' : ''}</span>
+                        </div>
+                    ` : ''}
                 </div>
+                ${item.type === 'post' ? `
+                    <div id="comments-section-${item.id}" class="comments-section" style="-webkit-line-clamp: 10; line-clamp: 10;">
+                        ${commentsHtml}
+                        ${currentUser ? `
+                            <div class="comment-input">
+                                <input type="text" id="comment-input-${item.id}" placeholder="Add a comment..." maxlength="200">
+                                <button onclick="addComment('${item.id}')">Post</button>
+                            </div>
+                        ` : ''}
+                    </div>
+                ` : ''}
             `;
             scrollitCardsContainer.appendChild(card);
-            console.log("Project card appended to container.");
+            console.log("Item card appended to container.");
         }
 
         /**
-         * Changes the displayed project based on direction.
+         * Changes the displayed project or post based on direction.
          * @param {number} direction - -1 for previous, 1 for next.
          */
         window.changeProject = function(direction) {
             if (allProjects.length === 0) {
-                console.log("Cannot change project, no projects loaded.");
+                console.log("Cannot change item, no projects or posts loaded.");
                 return;
             }
 
@@ -578,10 +988,12 @@
         };
 
         /**
-         * Navigates to the profile page of the project uploader.
+         * Navigates to the profile page of the project or post uploader.
          * @param {string} userId - The UID of the user to view.
          */
-        function goToProfile(userId) {
-            window.location.href = `http://echocloud.shop/codersprofile.htm?uid=${userId}`;
-        }
+        window.goToProfile = function(userId) {
+            window.location.href = `profile.html?uid=${userId}`;
+        };
     </script>
+</body>
+</html>
