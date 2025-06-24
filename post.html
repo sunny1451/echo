@@ -1,1 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Post - Echo</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #f9fafb, #e0f2fe);
+      color: #333;
+    }
+
+    nav {
+      background-color: #4f46e5;
+      color: white;
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav a.logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: white;
+      font-size: 0.9rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background-color: white;
+      color: #4f46e5;
+    }
+
+    .nav-links img {
+      width: 20px;
+      height: 20px;
+      margin-right: 6px;
+    }
+
+    main {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    section {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      outline: none;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      background-color: #4f46e5;
+      color: white;
+      padding: 10px 20px;
+      font-size: 14px;
+      border: none;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #4338ca;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <a href="index.html" class="logo">Echo</a>
+    <div class="nav-links">
+      <a href="https://sunny1451.github.io/echo/search.html">
+        <img src="https://cdn-icons-png.flaticon.com/512/3917/3917132.png" alt="Search Icon" />Search
+      </a>
+      <a href="https://sunny1451.github.io/echo/posts.html">
+        <img src="https://cdn-icons-png.flaticon.com/512/9350/9350064.png" alt="Posts Icon" />Posts
+      </a>
+      <a href="https://sunny1451.github.io/echo/settings.html">
+        <img src="https://cdn-icons-png.flaticon.com/512/4508/4508440.png" alt="Settings Icon" />Settings
+      </a>
+      <a href="https://sunny1451.github.io/echo/codersprofile.html">
+        <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Profile Icon" />Profile
+      </a>
+      <a href="https://sunny1451.github.io/echo/message.html" class="active">
+        <img src="https://cdn-icons-png.flaticon.com/512/893/893257.png" alt="Chats Icon" />Chats
+      </a>
+      <a href="http://echocloud.shop/scrollit.html">
+        <img src="https://cdn-icons-png.flaticon.com/512/4379/4379560.png" alt="Reels Icon" />scrollit
+      </a>
+      <a href="https://sunny1451.github.io/echo/portfolieo.html">
+        <img src="https://cdn-icons-png.flaticon.com/512/10493/10493865.png" alt="Portfolio Icon" />Portfolio
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Form -->
+  <main>
+    <section>
+      <h2>Post Your Idea</h2>
+      <div>
+        <label for="ideaTitle">Idea Title</label>
+        <input type="text" id="ideaTitle" placeholder="e.g. Smart Water Tracker" />
+
+        <label for="problemSolving">Problem it's solving</label>
+        <input type="text" id="problemSolving" placeholder="e.g. Saves water wastage" />
+
+        <label for="targetUsers">Target Users</label>
+        <input type="text" id="targetUsers" placeholder="e.g. Households, offices" />
+
+        <label for="description">Description</label>
+        <textarea id="description" rows="5" placeholder="Briefly explain your idea..."></textarea>
+
+        <div style="text-align: right;">
+          <button id="postButton">Submit Post</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Firebase Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFoIoUsTJ_4NzkV-sdNffAOjbHRxSRIp8",
+      authDomain: "echo-625fa.firebaseapp.com",
+      projectId: "echo-625fa",
+      storageBucket: "echo-625fa.appspot.com",
+      messagingSenderId: "890702112097",
+      appId: "1:890702112097:web:e81927ba359a8c426c1120",
+      measurementId: "G-DMBW4N7J2T"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const postButton = document.getElementById('postButton');
+    let currentUser = null;
+
+    postButton.addEventListener('click', async () => {
+      await postIdea();
+    });
+
+    async function postIdea() {
+      if (!currentUser) {
+        alert("Please log in to post an idea.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      const ideaTitle = document.getElementById('ideaTitle').value.trim();
+      const problemSolving = document.getElementById('problemSolving').value.trim();
+      const targetUsers = document.getElementById('targetUsers').value.trim();
+      const description = document.getElementById('description').value.trim();
+
+      if (!ideaTitle && !problemSolving && !targetUsers && !description) {
+        alert("Please provide at least one detail.");
+        return;
+      }
+
+      try {
+        const postData = {
+          userId: currentUser.uid,
+          ideaTitle,
+          problemSolving,
+          targetUsers,
+          description,
+          timestamp: new Date().toISOString()
+        };
+
+        const postsRef = collection(db, "posts");
+        const docRef = await addDoc(postsRef, postData);
+
+        const userRef = doc(db, "users", currentUser.uid);
+        await updateDoc(userRef, {
+          posts: arrayUnion(docRef.id)
+        });
+
+        alert("Post submitted successfully!");
+        window.location.href = 'scrollit.html';
+      } catch (error) {
+        alert(`Failed to post: ${error.message}`);
+      }
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        currentUser = user;
+      }
+    });
+  </script>
+</body>
+</html>
 
